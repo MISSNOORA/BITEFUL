@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biteful | User</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html">
+      <span class="logo">
+        <img src="images/biteful-logo.png" alt="BiteFul Logo">
+      </span>
+      <span class="brand-text">
+        <span class="brand-name">BiteFul</span>
+        <span class="brand-tag">Fast & Easy Meals</span>
+      </span>
+    </a>
+
+    <nav class="nav">
+      <a class="nav-link" href="my-recipes.html">My Recipes</a>
+      <a class="btn btn-primary" href="index.html">Sign Out</a>
+    </nav>
+  </div>
+</header>
+
+
+<main class="container user-wrap">
+
+  <section class="user-welcome">
+    <h1 class="user-title">Welcome back, <span class="name">Lina</span></h1>
+    <p class="user-sub">Here’s what’s happening with your recipes today.</p>
+  </section>
+
+  <section class="user-top">
+    <div class="panel user-card">
+      <img class="user-avatar-img" src="images/creator1.png" alt="User photo">
+      <div class="user-info">
+        <h3 class="user-name">Lina omar</h3>
+        <p class="user-email">Lina@gmail.com</p>
+        <span class="pill">Food Enthusiast</span>
+      </div>
+    </div>
+
+    <div class="panel stat stat-green">
+      <div class="stat-label">My Recipes</div>
+      <div class="stat-value">2</div>
+      <div class="stat-sub">Created by you</div>
+    </div>
+
+    <div class="panel stat stat-pink">
+      <div class="stat-label">Total Likes</div>
+      <div class="stat-value">390</div>
+      <div class="stat-sub">Across all recipes</div>
+    </div>
+  </section>
+
+  <section class="panel section">
+    <div class="section-bar">
+      <div>
+        <h2 class="section-title">All Available Recipes</h2>
+        <p class="section-sub">Simple healthy meals in minutes with minimal ingredients.</p>
+      </div>
+
+      <form class="filter" action="#">
+        <label class="filter-label" for="category">Category</label>
+        <select id="category" name="category">
+          <option>All</option>
+          <option>Main Meals</option>
+          <option>No Cook</option>
+          <option>Snacks</option>
+          <option>Smoothies</option>
+        </select>
+        <button class="filter-btn" type="button">Filter</button>
+      </form>
+    </div>
+
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Recipe</th>
+            <th>Creator</th>
+            <th>Likes</th>
+            <th>Category</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="recipe-cell">
+                <img class="thumb-img" src="images/BBSmoothie.png" alt="Recipe image">
+                Berry Banana Smoothie
+              </div>
+            </td>
+            <td>
+              <div class="creator-cell">
+             <img class="user-avatar-img" src="images/creator1.png" alt="User photo">
+                Lina omar 
+              </div>
+            </td>
+            <td><span class="likepill"><span class="dot"></span>234</span></td>
+            <td><span class="cat">Smoothies</span></td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class="recipe-cell">
+                <img class="thumb-img" src="images/snack.png" alt="Recipe image">
+                Banana Cookie Dough Balls
+              </div>
+            </td>
+            <td>
+              <div class="creator-cell">
+                <img class="user-avatar-img" src="images/creator1.png" alt="User photo">
+                Lina omar
+              </div>
+            </td>
+            <td><span class="likepill"><span class="dot"></span>156</span></td>
+            <td><span class="cat">Snacks</span></td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class="recipe-cell">
+                <img class="thumb-img" src="images/TunaCornSalad.png" alt="Recipe image">
+                Tuna Corn Salad
+              </div>
+            </td>
+            <td>
+              <div class="creator-cell">
+                <img class="user-avatar-img" src="images/creator4.png" alt="User photo">
+                saad khalid
+              </div>
+            </td>
+            <td><span class="likepill"><span class="dot"></span>189</span></td>
+            <td><span class="cat">No Cook</span></td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class="recipe-cell">
+                <img class="thumb-img" src="images/AvocadoEgg.png" alt="Recipe image">
+                Avocado Toast with Egg
+              </div>
+            </td>
+            <td>
+              <div class="creator-cell">
+                <img class="user-avatar-img" src="images/creator3.png" alt="User photo">
+                Sami Ali 
+              </div>
+            </td>
+            <td><span class="likepill"><span class="dot"></span>198</span></td>
+            <td><span class="cat">Main Meals</span></td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class="recipe-cell">
+                <img class="thumb-img" src="images/Pasta.png" alt="Recipe image">
+                Creamy Chicken Pasta
+              </div>
+            </td>
+            <td>
+              <div class="creator-cell">
+                <img class="user-avatar-img" src="images/creator2.png" alt="User photo">
+                Sarah Ahmad
+              </div>
+            </td>
+            <td><span class="likepill"><span class="dot"></span>312</span></td>
+            <td><span class="cat">Main Meals</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel section">
+    <div class="section-bar">
+      <div>
+        <h2 class="section-title">My Favourite Recipes</h2>
+        <p class="section-sub">Recipes you saved for later.</p>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Recipe</th>
+            <th class="actions">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="recipe-cell">
+                <img class="thumb-img" src="images/Pasta.png" alt="Recipe image">
+                Creamy Chicken Pasta
+              </div>
+            </td>
+            <td class="actions">Remove</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="recipe-cell">
+                <img class="thumb-img" src="images/snack.png" alt="Recipe image">
+                Banana Cookie Dough Balls
+              </div>
+            </td>
+            <td class="actions">Remove</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo logo-footer" aria-hidden="true"></span>
+        <span class="footer-name">BiteFul</span>
+      </div>
+      <div class="footer-copy">
+        © 2026 BiteFul. All rights reserved. ADVANCED WEB TECH.
+      </div>
+    </div>
+  </footer>
+
+
+</body>
+</html>
