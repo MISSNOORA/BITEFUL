@@ -784,13 +784,12 @@ select{
   padding:6px 10px;
 }
 
-.dot{
-  width:10px;
-  height:10px;
-  border-radius:999px;
-  background:#ef4444;
-  display:inline-block;
+.heart{
+  color:#ef4444;
+  font-size:30px;
+  line-height:1;
 }
+
 
 .cat{
   display:inline-flex;
