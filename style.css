@@ -445,10 +445,7 @@ body{
   border-color: rgba(16,185,129,.25);
 }
 
-@media (prefers-reduced-motion: reduce){
-  .float-up, .float-down, .float-card{ animation: none !important; }
-  .card, .card-image, .chip, .like{ transition: none !important; }
-}
+
 
 /*footer */
 .cta{
@@ -537,24 +534,6 @@ body{
   font-size:13px;
 }
 
-@media (max-width: 980px){
-  .hero-grid{ grid-template-columns: 1fr; }
-  .hero-media{ margin-top: 10px; }
-  .float-left{ left:12px; }
-  .float-right{ right:12px; }
-  .cards{ grid-template-columns: 1fr; }
-  .card-image{ height:190px; }
-}
-
-@media (max-width: 520px){
-  .header-inner{ padding:14px 0; }
-  .brand-name{ font-size:18px; }
-  .nav{ gap:10px; }
-  .btn{ padding:11px 14px; }
-  .hero{ padding:38px 0 18px; }
-  .stats{ gap:18px; flex-wrap:wrap; }
-  .float-card{ display:none; }
-}
 
 /* --------------------------------------------------------------------------- ***** --------------------------------------------------------------------------- */
 
