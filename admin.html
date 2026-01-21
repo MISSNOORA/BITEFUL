@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Biteful | Admin Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container user-wrap">
+
+  <!-- Admin Welcome -->
+  <div class="admin-welcome">
+    <h1 class="user-title">
+      Welcome, <span class="name">Admin</span>
+    </h1>
+    <p class="user-sub">
+      Manage reported recipes and blocked users.
+    </p>
+  </div>
+
+  <!-- Admin Info -->
+  <div class="panel section">
+    <p><strong>Name:</strong> Admin User</p>
+    <p><strong>Email:</strong> admin@biteful.com</p>
+  </div>
+
+  <!-- Reported Recipes -->
+  <div class="panel section">
+    <div class="section-bar">
+      <h2 class="section-title">Reported Recipes</h2>
+    </div>
+
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Recipe</th>
+            <th>Creator</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td>
+              <a href="pasta-main.html" class="link">
+                Creamy Chicken Pasta
+              </a>
+            </td>
+            <td class="creator-cell">
+              <img src="images/creator2.png" class="creator-avatar" alt="creator">
+              Sarah Ahmad
+            </td>
+            <td>
+              <form class="admin-action-form">
+                <button class="btn btn-ghost">Block User</button>
+                <button class="btn btn-ghost">Dismiss</button>
+              </form>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <a href="cookie-snack.html" class="link">
+                Banana Cookie Dough Balls
+              </a>
+            </td>
+            <td class="creator-cell">
+              <img src="images/creator1.png" class="creator-avatar" alt="creator">
+              Lina Omar
+            </td>
+            <td>
+              <form class="admin-action-form">
+                <button class="btn btn-ghost">Block User</button>
+                <button class="btn btn-ghost">Dismiss</button>
+              </form>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <a href="tuna-nocook.html" class="link">
+                Tuna Corn Salad
+              </a>
+            </td>
+            <td class="creator-cell">
+              <img src="images/creator4.png" class="creator-avatar" alt="creator">
+              Saad Khalid
+            </td>
+            <td>
+              <form class="admin-action-form">
+                <button class="btn btn-ghost">Block User</button>
+                <button class="btn btn-ghost">Dismiss</button>
+              </form>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Blocked Users -->
+  <div class="panel section">
+    <div class="section-bar">
+      <h2 class="section-title">Blocked Users</h2>
+    </div>
+
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Omar Faisal</td>
+            <td>omar.f@email.com</td>
+          </tr>
+          <tr>
+            <td>Reem Khalid</td>
+            <td>reem.k@email.com</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Sign Out -->
+  <div class="admin-signout">
+    <a href="index.html" class="btn btn-danger">
+      Sign Out
+    </a>
+  </div>
+
+</div>
+
+</body>
+</html>

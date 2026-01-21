@@ -826,3 +826,121 @@ select{
   display:block;
 }
 /* --------------------------------------------------------------------------- ***** --------------------------------------------------------------------------- */
+
+/* -------------------------------------------------- View Recipe Page -------------------------------- */
+
+.recipe-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.recipe-image {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 18px;
+  border: 1px solid rgba(229,231,235,.95);
+  flex-shrink: 0;
+}
+
+.recipe-title {
+  margin: 0;
+}
+
+.recipe-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.panel.section {
+  margin-bottom: 18px;
+}
+
+.panel ul,
+.panel ol {
+  margin-top: 10px;
+  padding-left: 18px;
+}
+
+.panel ul li,
+.panel ol li {
+  margin-bottom: 6px;
+}
+
+.recipe-info {
+  max-width: 520px;
+}
+
+.recipe-description {
+  margin-top: 6px;
+}
+
+.recipe-category {
+  margin-top: 10px;
+}
+
+.comment-form {
+  margin-top: 14px;
+}
+
+.comment-input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(229,231,235,.95);
+}
+
+.comment-btn {
+  margin-top: 10px;
+}
+
+
+
+/* --------------------------------------------------------------------------- ***** --------------------------------------------------------------------------- */
+
+/* -------------------------------------- Admin Page --------------------------------- */
+
+.admin-welcome {
+  margin-bottom: 18px;
+}
+
+.admin-action-form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.admin-signout {
+  margin-top: 18px;
+}
+
+.admin-action-form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.admin-signout {
+  margin-top: 24px;
+  text-align: right;
+}
+
+/* Red danger button */
+.btn-danger {
+  background: #ef4444;
+  color: #fff;
+  border: 1px solid #ef4444;
+  box-shadow: 0 14px 30px rgba(239,68,68,.25);
+}
+
+.btn-danger:hover {
+  background: #dc2626;
+  box-shadow: 0 18px 36px rgba(239,68,68,.3);
+}
+
+
+/* --------------------------------------------------------------------------- ***** --------------------------------------------------------------------------- */
+
