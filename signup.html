@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BiteFul - Sign Up</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="bg-page sign-page">
+
+  <div class="bg-overlay"></div>
+
+  <div class="center">
+    <div class="box">
+
+      <a class="back-link" href="index.html">← Back to Home</a>
+
+      <div class="top">
+        <img class="logo-img" src="images/biteful-logo.png" alt="BiteFul Logo">
+        <div>
+          <h1 class="site-name">BiteFul</h1>
+          <p class="site-sub">Fast & Easy Meals</p>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <a class="tab" href="signin.html">Sign In</a>
+        <a class="tab active" href="signup.html">Sign Up</a>
+      </div>
+
+      <h2 class="title">Create your account</h2>
+      <p class="desc">New user? Fill the form below</p>
+
+      <form id="signupForm" class="form">
+
+        <div class="profile">
+          <div class="profile-circle">
+            <span>👤</span>
+          </div>
+          <label class="upload">
+            Upload photo (optional)
+            <input id="photo" type="file" accept="image/*">
+          </label>
+        </div>
+
+        <div class="two">
+          <div class="group">
+            <label>First Name *</label>
+            <input id="firstName" type="text" placeholder="Lina">
+            <small class="error" id="firstError"></small>
+          </div>
+
+          <div class="group">
+            <label>Last Name *</label>
+            <input id="lastName" type="text" placeholder="Omar">
+            <small class="error" id="lastError"></small>
+          </div>
+        </div>
+
+        <div class="group">
+          <label>Email Address *</label>
+          <input id="signupEmail" type="text" placeholder="Lina@gmail.com">
+          <small class="error" id="signupEmailError"></small>
+        </div>
+
+        <div class="group">
+          <label>Password *</label>
+          <input id="signupPassword" type="password" placeholder="••••••••">
+          <small class="error" id="signupPassError"></small>
+        </div>
+
+        <a href="user.html" class="btn green">Create Account →</a>
+
+      </form>
+
+    </div>
+  </div>
+
+  <script src="javaScript.js"></script>
+</body>
+</html>
