@@ -804,7 +804,9 @@ select{
 
 .actions{
   width:160px;
-  text-align:right;
+  text-align:left;
+  
+
 }
 
 @media (max-width:980px){
