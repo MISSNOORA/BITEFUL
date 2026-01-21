@@ -1243,3 +1243,159 @@ select:focus {
   transform: translateY(-2px);
   box-shadow: 0 10px 20px rgba(34, 197, 94, 0.25);
 }
+
+
+/* --------------------------------------------------------------------------- My Recipes Page ---------------------------------------------------------------------- */
+
+
+   .my-recipes-page{
+    padding: 40px 0 60px;
+  }
+  
+  /* Page Header */
+  .page-head{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:20px;
+    margin-bottom:26px;
+    flex-wrap:wrap;
+  }
+  
+  .page-title{
+    margin:0;
+    font-size:34px;
+    letter-spacing:-0.6px;
+  }
+  
+  .page-sub{
+    margin-top:6px;
+    color:var(--muted);
+    font-size:14px;
+  }
+  
+  /* Table Wrapper */
+  .recipes-table-wrap{
+    background: var(--white);
+    border-radius:22px;
+    border:1px solid var(--border);
+    box-shadow: var(--shadow2);
+    overflow:auto;
+  }
+  
+  /* Table */
+  .recipes-table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:900px;
+  }
+  
+  .recipes-table thead th{
+    padding:16px;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.4px;
+    color:var(--muted);
+    background: var(--mint2);
+    text-align:left;
+  }
+  
+  .recipes-table tbody td{
+    padding:16px;
+    border-top:1px solid var(--border);
+    vertical-align:top;
+    font-weight:600;
+  }
+  
+  /* Recipe Cell */
+  .recipe-cell{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    text-decoration:none;
+    color:inherit;
+  }
+  
+  .recipe-thumb{
+    width:48px;
+    height:48px;
+    border-radius:14px;
+    object-fit:cover;
+    border:1px solid var(--border);
+  }
+  
+  .recipe-name{
+    font-weight:800;
+  }
+  
+  /* Ingredients & Instructions Lists */
+  .list{
+    margin:0;
+    padding-left:18px;
+    font-size:13px;
+    color:var(--muted);
+  }
+  
+  .list li{
+    margin-bottom:6px;
+  }
+  
+  /* Video Column */
+  .video-link{
+    font-weight:800;
+    color:var(--primaryHover);
+    text-decoration:none;
+  }
+  
+  .video-link:hover{
+    text-decoration:underline;
+  }
+  
+  .no-video{
+    font-size:13px;
+    color:var(--muted);
+  }
+  
+  /* Likes */
+  .like-pill{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:6px 10px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:900;
+    background: rgba(255,255,255,.9);
+    border:1px solid var(--border);
+  }
+  
+  /* Edit / Delete */
+  .action{
+    font-size:13px;
+    font-weight:900;
+    text-decoration:none;
+  }
+  
+  .action.edit{
+    color:var(--primaryHover);
+  }
+  
+  .action.delete{
+    color:#ef4444;
+  }
+  
+  /* Hover Effect */
+  .recipes-table tbody tr:hover{
+    background: rgba(236,253,245,.45);
+  }
+  
+  body{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+  
+  main{
+    flex:1;
+  }
+  

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Recipes | BiteFul</title>
+  <link rel="stylesheet" href="style.css"> 
+  
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="index.html" class="brand">
+      <div class="logo">
+        <img src="images/BiteFul-logo.png" alt="BiteFul Logo">
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">BiteFul</span>
+        <span class="brand-tag">Fast & Easy Meals</span>
+      </div>
+    </a>
+
+    <nav class="nav">
+      <a href="user.html" class="nav-link">Dashboard</a>
+      <a href="my-recipes.html" class="nav-link">My Recipes</a>
+      <a href="index.html" class="btn btn-ghost">Sign Out</a>
+    </nav>
+  </div>
+</header>
+
+<!-- Page Content -->
+<main class="container my-recipes-page">
+
+  <!-- Title + Add Button -->
+  <div class="page-head">
+    <div>
+      <h1 class="page-title">My Recipes</h1>
+      <p class="page-sub">Manage all recipes you’ve added</p>
+    </div>
+
+    <a href="add-recipe.html" class="btn btn-primary">
+      ➕ Add New Recipe
+    </a>
+  </div>
+
+  <!-- Table -->
+  <div class="recipes-table-wrap">
+    <table class="recipes-table">
+      <thead>
+        <tr>
+          <th>Recipe</th>
+          <th>Ingredients</th>
+          <th>Instructions</th>
+          <th>Video</th>
+          <th>Likes</th>
+          <th>Edit</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <!-- Recipe 1 -->
+        <tr>
+          <td>
+            <a href="cookie-snack.html" class="recipe-cell">
+              <img src="images/snack.png" alt="Recipe" class="recipe-thumb">
+              <span class="recipe-name"> Banana Cookie Dough Balls</span>
+            </a>
+          </td>
+
+           <!-- Ingredients -->
+          <td>
+            <ul class="list">
+              <li>1 ripe banana</li>
+              <li>1 cup oats</li>
+              <li>1 tbsp honey</li>
+            </ul>
+          </td>
+
+           <!-- Instructions -->
+          <td>
+            <ol class="list">
+              <li>Mash the banana.</li>
+              <li>Mix all ingredients together.</li>
+              <li>Roll into small balls.</li>
+            </ol>
+          </td>
+
+          <td>
+            <a href="#" class="video-link">Watch video</a>
+          </td>
+
+          <td>
+            <span class="like-pill">❤️ 22</span>
+          </td>
+
+          <td>
+            <a href="edit-recipe.html" class="action edit">Edit</a>
+          </td>
+
+          <td>
+            <a href="my-recipes.html" class="action delete">Delete</a>
+          </td>
+        </tr>
+
+        <!-- Recipe 2 -->
+        <tr>
+          <td>
+            <a href="berry-smoothie.html" class="recipe-cell">
+              <img src="images/BBSmoothie.png" alt="Recipe" class="recipe-thumb">
+              <span class="recipe-name">Oat Banana Bowl</span>
+            </a>
+          </td>
+
+           <!-- Ingredients -->
+          <td>
+            <ul class="list">
+              <li>1 banana</li>
+              <li>1 cup mixed berries</li>
+              <li>1 cup milk</li>
+            </ul>
+          </td>
+
+          <!-- Instructions -->
+          <td>
+            <ol class="list">
+              <li>Add all ingredients to a blender.</li>
+              <li>Blend until smooth.</li>
+              <li>Pour into a glass and serve.</li>
+            </ol>
+          </td>
+
+          <td>
+            <span class="no-video">no video for recipe</span>
+          </td>
+
+          <td>
+            <span class="like-pill">❤️ 15</span>
+          </td>
+
+          <td>
+            <a href="edit-recipe.html" class="action edit">Edit</a>
+          </td>
+
+          <td>
+            <a href="my-recipes.html" class="action delete">Delete</a>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <span class="logo logo-footer" aria-hidden="true"></span>
+      <span class="footer-name">BiteFul</span>
+    </div>
+    <div class="footer-copy">
+      © 2026 BiteFul. All rights reserved. ADVANCED WEB TECH.
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
