@@ -1332,7 +1332,8 @@ select:focus {
   }
   
   .recipe-name{
-    font-weight:800;
+    font-weight:500;
+    color:var(--primaryHover);
   }
   
   /* Ingredients & Instructions Lists */
@@ -1404,5 +1405,25 @@ select:focus {
   
   main{
     flex:1;
+  }
+  
+/* --------------------------------------------------------------------------- Edit Recipes Page ---------------------------------------------------------------------- */
+
+
+  .current-video a {
+    color: #16b97f;       
+    font-weight: 600;
+    text-decoration: none;
+  }
+  
+  .current-video a:hover {
+    text-decoration: underline;
+  }
+
+  
+
+  textarea {
+    resize: none;
+    min-height: 100px;
   }
   

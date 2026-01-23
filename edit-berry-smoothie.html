@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Add New Recipe</title>
+  <title>Edit Recipe</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -34,79 +34,87 @@
   <div class="center">
     <div class="box sign-page add-recipe-box">
 
-      <h2 class="title">Add New Recipe</h2>
-      <p class="desc">Fill in the details below to add a new healthy recipe.</p>
+      <h2 class="title">Edit Recipe</h2>
+      <p class="desc">Update the details of your recipe.</p>
 
       <form class="form" onsubmit="redirectToMyRecipes(event)">
 
         <!-- Recipe Name -->
         <div class="group">
           <label>Recipe Name</label>
-          <input type="text" required>
+          <input type="text" value="Berry Banana Smoothie" required>
         </div>
 
         <!-- Category -->
         <div class="group">
           <label>Category</label>
           <select required>
-            <option value="">Select</option>
             <option>Main meals</option>
             <option>No-cook</option>
             <option>Snacks</option>
-            <option>Smoothies</option>
+            <option selected>Smoothies</option>
           </select>
         </div>
 
         <!-- Description -->
         <div class="group">
           <label>Description</label>
-          <textarea rows="4" class="recipe-textarea" required></textarea>
+          <textarea rows="4" class="recipe-textarea" required>
+A refreshing and healthy smoothie made with banana, mixed berries, and milk.
+          </textarea>
         </div>
 
         <!-- Photo -->
         <div class="group">
           <label>Upload Recipe Photo</label>
-          <input type="file" required>
+          <input type="file">
+          <p class="small-text">Current Photo:</p>
+          <img src="images/BBSmoothie.png" width="80">
         </div>
 
         <!-- Ingredients -->
         <div class="group">
           <label>Ingredients</label>
-          <div id="ingredients">
-            <div class="two">
-              <input type="text" placeholder="Ingredient name" required>
-              <input type="text" placeholder="Quantity" required>
-            </div>
+
+          <div class="two">
+            <input type="text" value="Banana" required>
+            <input type="text" value="1 banana" required>
           </div>
-          <button type="button" class="btn btn-ghost" onclick="addIngredient()">
-            + Add another ingredient
-          </button>
+
+          <div class="two">
+            <input type="text" value="Mixed berries" required>
+            <input type="text" value="1 cup" required>
+          </div>
+
+          <div class="two">
+            <input type="text" value="Milk" required>
+            <input type="text" value="1 cup" required>
+          </div>
         </div>
 
         <!-- Instructions -->
         <div class="group">
           <label>Instructions</label>
-          <div id="steps">
-            <input type="text" placeholder="Step 1" required>
-          </div>
-          <button type="button" class="btn btn-ghost" onclick="addStep()">
-            + Add another step
-          </button>
+          <input type="text" value="Add all ingredients to a blender." required>
+          <input type="text" value="Blend until smooth." required>
+          <input type="text" value="Pour into a glass and serve." required>
         </div>
 
         <!-- Video -->
         <div class="group">
+            <p class="small-text">Current Video: no video for recipe</p>
           <label>Upload Video (Optional)</label>
           <input type="file">
+         
         </div>
 
         <div class="group">
           <label>Video URL (Optional)</label>
-          <input type="url" placeholder="https://youtube.com/...">
+          <input type="url">
         </div>
 
         <!-- Submit -->
-        <button type="submit" class="btn green">Add Recipe</button>
+        <button type="submit" class="btn green">Update Recipe</button>
 
       </form>
     </div>
@@ -128,27 +136,6 @@
 
 <!-- ================= SCRIPT ================= -->
 <script>
-  function addIngredient() {
-    const container = document.getElementById("ingredients");
-    const div = document.createElement("div");
-    div.className = "two";
-    div.innerHTML = `
-      <input type="text" placeholder="Ingredient name" required>
-      <input type="text" placeholder="Quantity" required>
-    `;
-    container.appendChild(div);
-  }
-
-  function addStep() {
-    const steps = document.getElementById("steps");
-    const stepNum = steps.children.length + 1;
-    const input = document.createElement("input");
-    input.type = "text";
-    input.placeholder = "Step " + stepNum;
-    input.required = true;
-    steps.appendChild(input);
-  }
-
   function redirectToMyRecipes(e) {
     e.preventDefault();
     window.location.href = "my-recipes.html";
