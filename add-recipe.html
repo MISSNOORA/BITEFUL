@@ -5,88 +5,127 @@
   <title>Add New Recipe</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<div class="center">
-  <div class="box sign-page add-recipe-box">
-    
-    <h2 class="title">Add New Recipe</h2>
-    <p class="desc">Fill in the details below to add a new healthy recipe.</p>
-
-    <form class="form" onsubmit="redirectToMyRecipes(event)">
-
-      <!-- Recipe Name -->
-      <div class="group">
-        <label>Recipe Name</label>
-        <input type="text" required>
+<!-- ================= HEADER ================= -->
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="index.html" class="brand">
+      <div class="logo">
+        <img src="images/BiteFul-logo.png" alt="BiteFul Logo">
       </div>
-
-      <!-- Category -->
-      <div class="group">
-        <label>Category</label>
-        <select required>
-          <option value="">Select</option>
-          <option>Quick Meals</option>
-          <option>Healthy Snacks</option>
-          <option>Meal Prep</option>
-        </select>
+      <div class="brand-text">
+        <span class="brand-name">BiteFul</span>
+        <span class="brand-tag">Fast & Easy Meals</span>
       </div>
+    </a>
 
-      <!-- Description -->
-      <div class="group">
-        <label>Description</label>
-        <textarea rows="4" class="recipe-textarea" required></textarea>
-      </div>
-
-      <!-- Photo -->
-      <div class="group">
-        <label>Upload Recipe Photo</label>
-        <input type="file" required>
-      </div>
-
-      <!-- Ingredients -->
-      <div class="group">
-        <label>Ingredients</label>
-        <div id="ingredients">
-          <div class="two">
-            <input type="text" placeholder="Ingredient name" required>
-            <input type="text" placeholder="Quantity" required>
-          </div>
-        </div>
-        <button type="button" class="btn btn-ghost" onclick="addIngredient()">
-          + Add another ingredient
-        </button>
-      </div>
-
-      <!-- Instructions -->
-      <div class="group">
-        <label>Instructions</label>
-        <div id="steps">
-          <input type="text" placeholder="Step 1" required>
-        </div>
-        <button type="button" class="btn btn-ghost" onclick="addStep()">
-          + Add another step
-        </button>
-      </div>
-
-      <!-- Video -->
-      <div class="group">
-        <label>Upload Video (Optional)</label>
-        <input type="file">
-      </div>
-
-      <div class="group">
-        <label>Video URL (Optional)</label>
-        <input type="url" placeholder="https://youtube.com/...">
-      </div>
-
-      <!-- Submit -->
-      <button type="submit" class="btn green">Add Recipe</button>
-
-    </form>
+    <nav class="nav">
+      <a href="user.html" class="nav-link">Dashboard</a>
+      <a href="my-recipes.html" class="nav-link">My Recipes</a>
+      <a href="index.html" class="btn btn-ghost">Sign Out</a>
+    </nav>
   </div>
-</div>
+</header>
 
+<!-- ================= MAIN CONTENT ================= -->
+<main class="page-content">
+  <div class="center">
+    <div class="box sign-page add-recipe-box">
+
+      <h2 class="title">Add New Recipe</h2>
+      <p class="desc">Fill in the details below to add a new healthy recipe.</p>
+
+      <form class="form" onsubmit="redirectToMyRecipes(event)">
+
+        <!-- Recipe Name -->
+        <div class="group">
+          <label>Recipe Name</label>
+          <input type="text" required>
+        </div>
+
+        <!-- Category -->
+        <div class="group">
+          <label>Category</label>
+          <select required>
+            <option value="">Select</option>
+            <option>Quick Meals</option>
+            <option>Healthy Snacks</option>
+            <option>Meal Prep</option>
+          </select>
+        </div>
+
+        <!-- Description -->
+        <div class="group">
+          <label>Description</label>
+          <textarea rows="4" class="recipe-textarea" required></textarea>
+        </div>
+
+        <!-- Photo -->
+        <div class="group">
+          <label>Upload Recipe Photo</label>
+          <input type="file" required>
+        </div>
+
+        <!-- Ingredients -->
+        <div class="group">
+          <label>Ingredients</label>
+          <div id="ingredients">
+            <div class="two">
+              <input type="text" placeholder="Ingredient name" required>
+              <input type="text" placeholder="Quantity" required>
+            </div>
+          </div>
+          <button type="button" class="btn btn-ghost" onclick="addIngredient()">
+            + Add another ingredient
+          </button>
+        </div>
+
+        <!-- Instructions -->
+        <div class="group">
+          <label>Instructions</label>
+          <div id="steps">
+            <input type="text" placeholder="Step 1" required>
+          </div>
+          <button type="button" class="btn btn-ghost" onclick="addStep()">
+            + Add another step
+          </button>
+        </div>
+
+        <!-- Video -->
+        <div class="group">
+          <label>Upload Video (Optional)</label>
+          <input type="file">
+        </div>
+
+        <div class="group">
+          <label>Video URL (Optional)</label>
+          <input type="url" placeholder="https://youtube.com/...">
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="btn green">Add Recipe</button>
+
+      </form>
+    </div>
+  </div>
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <span class="logo logo-footer" aria-hidden="true"></span>
+      <span class="footer-name">BiteFul</span>
+    </div>
+    <div class="footer-copy">
+      © 2026 BiteFul. All rights reserved. ADVANCED WEB TECH.
+    </div>
+  </div>
+</footer>
+
+<!-- ================= SCRIPT ================= -->
 <script>
   function addIngredient() {
     const container = document.getElementById("ingredients");
