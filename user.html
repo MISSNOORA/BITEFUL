@@ -10,24 +10,23 @@
 
 <header class="site-header">
   <div class="container header-inner">
-    <a class="brand" href="index.html">
-      <span class="logo">
-        <img src="images/biteful-logo.png" alt="BiteFul Logo">
-      </span>
-      <span class="brand-text">
+    <a href="index.html" class="brand">
+      <div class="logo">
+        <img src="images/BiteFul-logo.png" alt="BiteFul Logo">
+      </div>
+      <div class="brand-text">
         <span class="brand-name">BiteFul</span>
         <span class="brand-tag">Fast & Easy Meals</span>
-      </span>
+      </div>
     </a>
 
     <nav class="nav">
-      <a class="nav-link" href="my-recipes.html">My Recipes</a>
-      <a class="btn btn-primary" href="index.html">Sign Out</a>
+      <a href="user.html" class="nav-link">Dashboard</a>
+      <a href="my-recipes.html" class="nav-link">My Recipes</a>
+      <a href="index.html" class="btn btn-ghost">Sign Out</a>
     </nav>
   </div>
 </header>
-
-
 <main class="container user-wrap">
 
   <section class="user-welcome">
@@ -93,7 +92,7 @@
             <td>
               <div class="recipe-cell">
                 <img class="thumb-img" src="images/BBSmoothie.png" alt="Recipe image">
-                Berry Banana Smoothie
+                <a class="recipe-link" href="berry-smoothie.html">Berry Banana Smoothie</a>
               </div>
             </td>
             <td>
@@ -110,7 +109,7 @@
             <td>
               <div class="recipe-cell">
                 <img class="thumb-img" src="images/snack.png" alt="Recipe image">
-                Banana Cookie Dough Balls
+                <a class="recipe-link" href="cookie-snack.html">Banana Cookie Dough Balls</a>
               </div>
             </td>
             <td>
@@ -127,7 +126,7 @@
             <td>
               <div class="recipe-cell">
                 <img class="thumb-img" src="images/TunaCornSalad.png" alt="Recipe image">
-                Tuna Corn Salad
+                <a class="recipe-link" href="tuna-nocook.html">Tuna Corn Salad</a>
               </div>
             </td>
             <td>
@@ -144,7 +143,7 @@
             <td>
               <div class="recipe-cell">
                 <img class="thumb-img" src="images/AvocadoEgg.png" alt="Recipe image">
-                Avocado Toast with Egg
+                <a class="recipe-link" href="avocado-main.html">Avocado Toast with Egg</a>
               </div>
             </td>
             <td>
@@ -161,7 +160,7 @@
             <td>
               <div class="recipe-cell">
                 <img class="thumb-img" src="images/Pasta.png" alt="Recipe image">
-                Creamy Chicken Pasta
+                <a class="recipe-link" href="pasta-main.html">Creamy Chicken Pasta</a>
               </div>
             </td>
             <td>
@@ -199,19 +198,21 @@
             <td>
               <div class="recipe-cell">
                 <img class="thumb-img" src="images/Pasta.png" alt="Recipe image">
-                Creamy Chicken Pasta
+                <a class="recipe-link" href="pasta-main.html">Creamy Chicken Pasta</a>
               </div>
             </td>
-            <td class="actions">Remove</td>
+            <td class="actions"><a class="remove-btn" href="#">Remove</a>
+</td>
           </tr>
           <tr>
             <td>
               <div class="recipe-cell">
                 <img class="thumb-img" src="images/snack.png" alt="Recipe image">
-                Banana Cookie Dough Balls
+                <a class="recipe-link" href="cookie-snack.html">Banana Cookie Dough Balls</a>
               </div>
             </td>
-            <td class="actions">Remove</td>
+            <td class="actions"><a class="remove-btn" href="#">Remove</a>
+</td>
           </tr>
         </tbody>
       </table>
