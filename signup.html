@@ -31,7 +31,7 @@
       <h2 class="title">Create your account</h2>
       <p class="desc">New user? Fill the form below</p>
 
-      <form id="signupForm" class="form">
+      <form id="signupForm" class="form" action="user.html" method="get">
 
         <div class="profile">
           <div class="profile-circle">
@@ -46,30 +46,27 @@
         <div class="two">
           <div class="group">
             <label>First Name *</label>
-            <input id="firstName" type="text" placeholder="Lina">
-            <small class="error" id="firstError"></small>
+            <input id="firstName" type="text" placeholder="Lina" required>
           </div>
 
           <div class="group">
             <label>Last Name *</label>
-            <input id="lastName" type="text" placeholder="Omar">
-            <small class="error" id="lastError"></small>
+            <input id="lastName" type="text" placeholder="Omar" required>
           </div>
         </div>
 
         <div class="group">
           <label>Email Address *</label>
-          <input id="signupEmail" type="text" placeholder="Lina@gmail.com">
-          <small class="error" id="signupEmailError"></small>
+          <input id="signupEmail" type="text" placeholder="Lina@gmail.com" required>
         </div>
 
         <div class="group">
           <label>Password *</label>
-          <input id="signupPassword" type="password" placeholder="••••••••">
-          <small class="error" id="signupPassError"></small>
+          <input id="signupPassword" type="password" placeholder="••••••••" required>
         </div>
 
-        <a href="user.html" class="btn green">Create Account →</a>
+        
+        <button type="submit" class="btn green">Create Account →</button>
 
       </form>
 
