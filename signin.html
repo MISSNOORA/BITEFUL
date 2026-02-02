@@ -31,20 +31,18 @@
       <h2 class="title">Welcome back</h2>
       <p class="desc">Sign in to continue to your account</p>
 
-      <form id="signinForm" class="form">
+      <form id="signinForm" class="form" action="user.html" method="get">
         <div class="group">
           <label>Email Address</label>
-          <input id="email" type="text" placeholder="john@example.com">
-          <small class="error" id="emailError"></small>
+          <input id="email" type="text" placeholder="john@example.com" required>
         </div>
 
         <div class="group">
           <label>Password</label>
-          <input id="password" type="password" placeholder="••••••••">
-          <small class="error" id="passError"></small>
+          <input id="password" type="password" placeholder="••••••••" required>
         </div>
 
-        <a href="user.html" class="btn green">Sign in as User →</a>
+        <button type="submit" class="btn green">Sign in as User →</button>
 
         <div class="or-line">
           <span>or</span>
