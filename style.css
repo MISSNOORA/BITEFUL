@@ -1,5 +1,4 @@
 
-/* testt */
 :root{
   --mint:#ecfdf5;
   --mint2:#f6fffb;
@@ -1064,6 +1063,39 @@ select{
   object-fit:cover;
   border:1px solid rgba(229,231,235,.95);
   display:block;
+}
+.recipe-link{
+  color:var(--text);
+  text-decoration:none;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.recipe-link:hover{
+  color:var(--primaryHover);
+  text-decoration:underline;
+}
+
+.recipe-link:focus{
+  color:var(--primaryHover);
+  outline:none;
+}
+.remove-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px 14px;
+  border-radius:12px;
+  border:1px solid rgba(239,68,68,.3);
+  background:rgba(239,68,68,.08);
+  color:#ef4444;
+  font-weight:900;
+  text-decoration:none;
+  cursor:pointer;
+}
+
+.remove-btn:hover{
+  background:rgba(239,68,68,.15);
 }
 /* --------------------------------------------------------------------------- ***** --------------------------------------------------------------------------- */
 
