@@ -2,7 +2,7 @@
 $host = "localhost";
 $user = "root";
 $password = "root";
-$database = "biteful";
+$database = "biteful_db";
 
 $conn = new mysqli($host, $user, $password, $database);
 
