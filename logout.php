@@ -1,6 +1,6 @@
 <?php
 session_start();
 session_destroy(); // clears all session variables
-header("Location: signin.html");
+header("Location: signin.php");
 exit();
 ?>

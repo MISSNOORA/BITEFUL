@@ -1,17 +1,15 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 session_start();
-include("db.php");
+require_once "db.php";
 
-if (!isset($_SESSION['user_id'])) {
-    header("Location: signin.html");
+if (!isset($_SESSION['userID'])) {
+    header("Location: signin.php");
     exit();
 }
 
-$user_id = $_SESSION['user_id'];
+$userID = $_SESSION['userID'];
 
-$query = "SELECT * FROM Recipe WHERE userID = '$user_id'";
+$query = "SELECT * FROM recipe WHERE userID = '$userID'";
 $result = mysqli_query($conn, $query);
 ?>
 
@@ -38,9 +36,9 @@ $result = mysqli_query($conn, $query);
     </a>
 
     <nav class="nav">
-      <a href="user.html" class="nav-link">Dashboard</a>
+      <a href="user.php" class="nav-link">Dashboard</a>
       <a href="my-recipes.php" class="nav-link">My Recipes</a>
-      <a href="index.html" class="btn btn-ghost">Sign Out</a>
+      <a href="logout.php" class="btn btn-ghost">Sign Out</a>
     </nav>
   </div>
 </header>

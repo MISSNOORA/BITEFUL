@@ -3,7 +3,7 @@ session_start();
 require_once "db.php";
 
 if (!isset($_SESSION['userID'])) {
-    header("Location: signin.html");
+    header("Location: signin.php");
     exit();
 }
 

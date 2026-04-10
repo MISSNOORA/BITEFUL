@@ -1,9 +1,14 @@
 <?php
 session_start();
 require_once "db.php";
-$_SESSION['userID'] = 3;
-$_SESSION['userType'] = "user";
-if (!isset($_SESSION['userID']) || $_SESSION['userType'] != "user") {
+
+// Remove hardcoded session lines and add proper security check
+if (!isset($_SESSION['userID'])) {
+    header("Location: signin.php");
+    exit();
+}
+
+if ($_SESSION['userType'] != "user") {
     header("Location: signin.php");
     exit();
 }
@@ -123,7 +128,7 @@ $favouritesResult = $favouritesStmt->get_result();
 
   <section class="user-welcome">
     <h1 class="user-title">Welcome back, <span class="name"><?php echo htmlspecialchars($user['firstName']); ?></span></h1>
-    <p class="user-sub">Here’s what’s happening with your recipes today.</p>
+    <p class="user-sub">Here's what's happening with your recipes today.</p>
   </section>
 
   <section class="user-top">

@@ -1,4 +1,7 @@
-<?php
+
+
+
+ <?php
 session_start();
 require_once "db.php";
 
@@ -14,7 +17,7 @@ $checkBlocked->store_result();
 
 if ($checkBlocked->num_rows > 0) {
     // User is blocked
-    header("Location: signin.html?error=blocked");
+    header("Location: signin.php?error=blocked");
     exit();
 }
 $checkBlocked->close();
