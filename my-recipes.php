@@ -9,8 +9,11 @@ if (!isset($_SESSION['userID'])) {
 
 $userID = $_SESSION['userID'];
 
-$query = "SELECT * FROM recipe WHERE userID = '$userID'";
-$result = mysqli_query($conn, $query);
+/* ✅ Secure Query */
+$stmt = $conn->prepare("SELECT * FROM recipe WHERE userID = ?");
+$stmt->bind_param("i", $userID);
+$stmt->execute();
+$result = $stmt->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -19,7 +22,6 @@ $result = mysqli_query($conn, $query);
   <meta charset="UTF-8">
   <title>My Recipes | BiteFul</title>
   <link rel="stylesheet" href="style.css"> 
-  
 </head>
 <body>
 
@@ -43,22 +45,19 @@ $result = mysqli_query($conn, $query);
   </div>
 </header>
 
-<!-- Page Content -->
 <main class="container my-recipes-page">
 
-  <!-- Title + Add Button -->
   <div class="page-head">
     <div>
       <h1 class="page-title">My Recipes</h1>
       <p class="page-sub">Manage all recipes you’ve added</p>
     </div>
 
-    <a href="add-recipe.html" class="btn btn-primary">
+    <a href="add-recipe.php" class="btn btn-primary">
       ➕ Add New Recipe
     </a>
   </div>
 
-  <!-- Table -->
   <div class="recipes-table-wrap">
     <table class="recipes-table">
       <thead>
@@ -74,54 +73,71 @@ $result = mysqli_query($conn, $query);
       </thead>
 
       <tbody>
-          <?php if (mysqli_num_rows($result) > 0) { ?>
-          <?php while ($row = mysqli_fetch_assoc($result)) { 
+
+<?php if ($result->num_rows > 0) { ?>
+<?php while ($row = $result->fetch_assoc()) { 
     $recipe_id = $row['id'];
 
-    $like_query = "SELECT COUNT(*) AS total FROM Likes WHERE recipeID = '$recipe_id'";
-    $like_result = mysqli_query($conn, $like_query);
-    $like_data = mysqli_fetch_assoc($like_result);
-    $likes = $like_data['total'];
-?> 
+    /* ✅ Likes count */
+    $like_stmt = $conn->prepare("SELECT COUNT(*) AS total FROM Likes WHERE recipeID = ?");
+    $like_stmt->bind_param("i", $recipe_id);
+    $like_stmt->execute();
+    $like_result = $like_stmt->get_result();
+    $likes = $like_result->fetch_assoc()['total'];
 
-          <tr>
+    /* ✅ Image fallback */
+    $img = !empty($row['photoFileName']) ? $row['photoFileName'] : 'default.png';
+?>
+
+<tr>
+  <!-- Recipe -->
   <td>
-    <a href="view-recipe.php?id=<?php echo $recipe_id; ?>" class="recipe-cell">
-      <img src="images/<?php echo $row['photoFileName']; ?>" class="recipe-thumb">
-      <span class="recipe-name"><?php echo $row['name']; ?></span>
+    <a href="viewRecipe.php?id=<?php echo $recipe_id; ?>" class="recipe-cell">
+      <img src="images/<?php echo htmlspecialchars($img); ?>" class="recipe-thumb">
+      <span class="recipe-name"><?php echo htmlspecialchars($row['name']); ?></span>
     </a>
   </td>
 
   <!-- Ingredients -->
   <td>
+    <ul class="list">
     <?php
-    $ing = mysqli_query($conn, "SELECT * FROM Ingredients WHERE recipeID='$recipe_id'");
-    echo "<ul class='list'>";
-    while ($i = mysqli_fetch_assoc($ing)) {
-        echo "<li>" . $i['ingredientName'] . " - " . $i['ingredientQuantity'] . "</li>";
+    $ing_stmt = $conn->prepare("SELECT * FROM Ingredients WHERE recipeID = ?");
+    $ing_stmt->bind_param("i", $recipe_id);
+    $ing_stmt->execute();
+    $ing_result = $ing_stmt->get_result();
+
+    while ($i = $ing_result->fetch_assoc()) {
+        echo "<li>" . htmlspecialchars($i['ingredientName']) . " - " . htmlspecialchars($i['ingredientQuantity']) . "</li>";
     }
-    echo "</ul>";
     ?>
+    </ul>
   </td>
 
   <!-- Instructions -->
   <td>
+    <ol class="list">
     <?php
-    $ins = mysqli_query($conn, "SELECT * FROM Instructions WHERE recipeID='$recipe_id' ORDER BY stepOrder");
-    echo "<ol class='list'>";
-    while ($s = mysqli_fetch_assoc($ins)) {
-        echo "<li>" . $s['step'] . "</li>";
+    $ins_stmt = $conn->prepare("SELECT * FROM Instructions WHERE recipeID = ? ORDER BY stepOrder");
+    $ins_stmt->bind_param("i", $recipe_id);
+    $ins_stmt->execute();
+    $ins_result = $ins_stmt->get_result();
+
+    while ($s = $ins_result->fetch_assoc()) {
+        echo "<li>" . htmlspecialchars($s['step']) . "</li>";
     }
-    echo "</ol>";
     ?>
+    </ol>
   </td>
 
   <!-- Video -->
   <td>
     <?php if (!empty($row['videoFilePath'])) { ?>
-      <a href="videos/<?php echo $row['videoFilePath']; ?>" target="_blank" class="video-link">Watch video</a>
+      <a href="videos/<?php echo htmlspecialchars($row['videoFilePath']); ?>" target="_blank" class="video-link">
+        Watch video
+      </a>
     <?php } else { ?>
-      <span class="no-video">no video</span>
+      <span class="no-video">No video</span>
     <?php } ?>
   </td>
 
@@ -137,7 +153,11 @@ $result = mysqli_query($conn, $query);
 
   <!-- Delete -->
   <td>
-    <a href="delete_recipe.php?id=<?php echo $recipe_id; ?>" class="action delete">Delete</a>
+    <a href="delete-recipe.php?id=<?php echo $recipe_id; ?>" 
+       class="action delete"
+       onclick="return confirm('Are you sure you want to delete this recipe?');">
+       Delete
+    </a>
   </td>
 </tr>
 
@@ -145,10 +165,11 @@ $result = mysqli_query($conn, $query);
 
 <?php } else { ?>
 <tr>
-  <td colspan="7">You have no recipes</td>
+  <td colspan="7" style="text-align:center;">
+    🍽️ You haven’t added any recipes yet. Start by adding one!
+  </td>
 </tr>
 <?php } ?>
-      
 
       </tbody>
     </table>
@@ -159,7 +180,6 @@ $result = mysqli_query($conn, $query);
 <footer class="footer">
   <div class="container footer-inner">
     <div class="footer-brand">
-      <span class="logo logo-footer" aria-hidden="true"></span>
       <span class="footer-name">BiteFul</span>
     </div>
     <div class="footer-copy">
@@ -170,4 +190,3 @@ $result = mysqli_query($conn, $query);
 
 </body>
 </html>
-
