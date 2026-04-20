@@ -113,6 +113,10 @@ if (!$isCreator && !$isAdmin) {
 </head>
 <body>
 
+<?php
+session_start();
+?>
+
 <header class="site-header">
   <div class="container header-inner">
     <a href="index.html" class="brand">
@@ -126,9 +130,22 @@ if (!$isCreator && !$isAdmin) {
     </a>
 
     <nav class="nav">
-      <a href="user.php" class="nav-link">Dashboard</a>
-      <a href="myRecipes.php" class="nav-link">My Recipes</a>
+
+      <?php if (isset($_SESSION['userType']) && $_SESSION['userType'] === 'admin'): ?>
+
+        <!-- ADMIN NAV -->
+        <a href="admin.php" class="nav-link">Dashboard</a>
+
+      <?php else: ?>
+
+        <!-- NORMAL USER NAV -->
+        <a href="user.php" class="nav-link">Dashboard</a>
+        <a href="my-recipes.php" class="nav-link">My Recipes</a>
+
+      <?php endif; ?>
+
       <a href="logout.php" class="btn btn-ghost">Sign Out</a>
+
     </nav>
   </div>
 </header>
