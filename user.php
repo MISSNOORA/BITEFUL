@@ -42,7 +42,19 @@ $categoriesResult = $conn->query("SELECT * FROM recipecategory");
 
 $selectedCategory = "All";
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['category'])) {
+if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+    $recipesStmt = $conn->prepare("
+        SELECT r.id, r.name, r.photoFileName, u.firstName, u.lastName, c.categoryName,
+        (SELECT COUNT(*) FROM likes WHERE recipeID = r.id) AS likesCount
+        FROM recipe r
+        JOIN user u ON r.userID = u.id
+        JOIN recipecategory c ON r.categoryID = c.id
+        ORDER BY r.id DESC
+    ");
+    $recipesStmt->execute();
+    $recipesResult = $recipesStmt->get_result();
+
+} elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['category'])) {
     $selectedCategory = $_POST['category'];
 
     if ($selectedCategory == "All") {
@@ -70,17 +82,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['category'])) {
         $recipesStmt->execute();
         $recipesResult = $recipesStmt->get_result();
     }
-} else {
-    $recipesStmt = $conn->prepare("
-        SELECT r.id, r.name, r.photoFileName, u.firstName, u.lastName, c.categoryName,
-        (SELECT COUNT(*) FROM likes WHERE recipeID = r.id) AS likesCount
-        FROM recipe r
-        JOIN user u ON r.userID = u.id
-        JOIN recipecategory c ON r.categoryID = c.id
-        ORDER BY r.id DESC
-    ");
-    $recipesStmt->execute();
-    $recipesResult = $recipesStmt->get_result();
 }
 
 $favouritesStmt = $conn->prepare("
