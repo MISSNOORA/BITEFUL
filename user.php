@@ -118,7 +118,7 @@ $favouritesResult = $favouritesStmt->get_result();
 
     <nav class="nav">
       <a href="user.php" class="nav-link">Dashboard</a>
-      <a href="myRecipes.php" class="nav-link">My Recipes</a>
+      <a href="my-recipes.php" class="nav-link">My Recipes</a>
       <a href="logout.php" class="btn btn-ghost">Sign Out</a>
     </nav>
   </div>
