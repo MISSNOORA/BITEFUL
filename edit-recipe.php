@@ -32,7 +32,7 @@ $steps = $conn->query("SELECT * FROM instructions WHERE recipeID=$recipe_id ORDE
 /* ===== UPDATE ===== */
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    $recipe_id = $_POST['recipe_id']; // ✅ المطلوب
+    $recipe_id = $_POST['recipe_id']; 
     $name = $_POST['name'];
     $categoryID = $_POST['category'];
     $description = $_POST['description'];
@@ -46,13 +46,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     /* VIDEO */
-    if (!empty($_FILES['video']['name'])) {
-        $videoName = uniqid() . "_" . $_FILES['video']['name'];
-        move_uploaded_file($_FILES['video']['tmp_name'], "videos/" . $videoName);
-        $videoPath = $videoName;
-    } else {
-        $videoPath = !empty($_POST['videoURL']) ? $_POST['videoURL'] : $recipe['videoFilePath'];
+    
+if (!empty($_FILES['video']['name'])) {
+
+    
+    $videoName = uniqid() . "_" . $_FILES['video']['name'];
+
+    move_uploaded_file($_FILES['video']['tmp_name'], "videos/" . $videoName);
+
+    
+    $videoPath = $videoName;
+
+} else {
+
+   
+    if (!empty($_POST['videoURL'])) {
+        $videoPath = $_POST['videoURL'];
+    } 
+    
+    else {
+        $videoPath = $recipe['videoFilePath'];
     }
+}
 
     /* UPDATE RECIPE */
     $stmt = $conn->prepare("UPDATE recipe SET name=?, categoryID=?, description=?, photoFileName=?, videoFilePath=? WHERE id=?");
@@ -190,6 +205,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
           </button>
         </div>
 
+        <?php if (!empty($recipe['videoFilePath'])) { 
+
+    $video = $recipe['videoFilePath'];
+
+    if (filter_var($video, FILTER_VALIDATE_URL)) {
+        $link = $video;
+    } else {
+        $link = "videos/" . $video;
+    }
+?>
+    <p>
+        Current video:
+        <a href="<?php echo htmlspecialchars($link); ?>" target="_blank">
+            Watch video
+        </a>
+    </p>
+<?php } ?>
         <div class="group">
           <label>Upload Video (Optional)</label>
           <input type="file" name="video" accept="video/*">
@@ -197,7 +229,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         <div class="group">
           <label>Video URL (Optional)</label>
-          <input type="url" name="videoURL" value="<?= $recipe['videoFilePath'] ?>">
+         <input type="url" name="videoURL" value="<?= filter_var($recipe['videoFilePath'], FILTER_VALIDATE_URL) ? $recipe['videoFilePath'] : '' ?>">
         </div>
 
         <button type="submit" class="btn green">Update Recipe</button>

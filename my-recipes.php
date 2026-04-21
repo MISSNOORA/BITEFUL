@@ -131,15 +131,27 @@ $result = $stmt->get_result();
   </td>
 
   <!-- Video -->
-  <td>
-    <?php if (!empty($row['videoFilePath'])) { ?>
-      <a href="<?php echo htmlspecialchars($row['videoFilePath']); ?>" target="_blank" class="video-link">
+ <td>
+<?php 
+if (!empty($row['videoFilePath'])) { 
+
+    $video = $row['videoFilePath'];
+
+    if (filter_var($video, FILTER_VALIDATE_URL)) {
+        $link = $video; 
+    } 
+    else {
+        $link = "videos/" . $video; 
+    }
+?>
+    <a href="<?php echo htmlspecialchars($link); ?>" target="_blank" class="video-link">
         Watch video
-      </a>
-    <?php } else { ?>
-      <span class="no-video">No video</span>
-    <?php } ?>
-  </td>
+    </a>
+
+<?php } else { ?>
+    <span class="no-video">No video</span>
+<?php } ?>
+</td>
 
   <!-- Likes -->
   <td>
