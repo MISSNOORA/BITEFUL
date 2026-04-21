@@ -133,7 +133,7 @@ $result = $stmt->get_result();
   <!-- Video -->
   <td>
     <?php if (!empty($row['videoFilePath'])) { ?>
-      <a href="videos/<?php echo htmlspecialchars($row['videoFilePath']); ?>" target="_blank" class="video-link">
+      <a href="<?php echo htmlspecialchars($row['videoFilePath']); ?>" target="_blank" class="video-link">
         Watch video
       </a>
     <?php } else { ?>
