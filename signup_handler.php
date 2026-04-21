@@ -36,7 +36,7 @@ if ($checkBlocked->num_rows > 0) {
 $checkBlocked->close();
 
 // 4. Handle photo upload
-$photoFileName = "default.png"; // default photo if none uploaded
+$photoFileName = "default.jpg"; // default photo if none uploaded
 
 if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
     $uploadsDir = "images/"; // folder where photos are saved
