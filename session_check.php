@@ -4,7 +4,7 @@ session_start();
 
 if (!isset($_SESSION['userID'])) {
     // Not logged in — send to login page
-    header("Location: signin.php");
+    header("Location: index.html");
     exit();
 }
 ?>
