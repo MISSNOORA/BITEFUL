@@ -50,7 +50,7 @@ $result = $stmt->get_result();
   <div class="page-head">
     <div>
       <h1 class="page-title">My Recipes</h1>
-      <p class="page-sub">Manage all recipes you’ve added</p>
+      <p class="page-sub">Manage all recipes you've added</p>
     </div>
 
     <a href="add-recipe.php" class="btn btn-primary">
@@ -89,7 +89,7 @@ $result = $stmt->get_result();
     $img = !empty($row['photoFileName']) ? $row['photoFileName'] : 'default.png';
 ?>
 
-<tr>
+<tr id="recipe-row-<?php echo $recipe_id; ?>">
   <!-- Recipe -->
   <td>
     <a href="viewRecipe.php?id=<?php echo $recipe_id; ?>" class="recipe-cell">
@@ -165,9 +165,10 @@ if (!empty($row['videoFilePath'])) {
 
   <!-- Delete -->
   <td>
-    <a href="delete-recipe.php?id=<?php echo $recipe_id; ?>" 
+    <a href="#"
        class="action delete"
-       onclick="return confirm('Are you sure you want to delete this recipe?');">
+       data-id="<?php echo $recipe_id; ?>"
+       onclick="deleteRecipe(<?php echo $recipe_id; ?>); return false;">
        Delete
     </a>
   </td>
@@ -176,9 +177,9 @@ if (!empty($row['videoFilePath'])) {
 <?php } ?>
 
 <?php } else { ?>
-<tr>
+<tr id="no-recipes-row">
   <td colspan="7" style="text-align:center;">
-    🍽️ You haven’t added any recipes yet. Start by adding one!
+    🍽️ You haven't added any recipes yet. Start by adding one!
   </td>
 </tr>
 <?php } ?>
@@ -200,5 +201,48 @@ if (!empty($row['videoFilePath'])) {
   </div>
 </footer>
 
+<<script>
+function deleteRecipe(recipeID) {
+  if (!confirm('Are you sure you want to delete this recipe?')) return;
+
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "ajax-delete-recipe.php", true);
+  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        const response = xhr.responseText.trim();
+        console.log("Response: [" + response + "]"); // Debug log
+
+        if (response === "true") {
+          const row = document.getElementById("recipe-row-" + recipeID);
+          if (row) {
+            row.remove();
+          }
+
+          // If no rows left, show empty message
+          const tbody = document.querySelector(".recipes-table tbody");
+          const remainingRows = tbody.querySelectorAll("tr[id^='recipe-row-']");
+          if (remainingRows.length === 0) {
+            tbody.innerHTML = `
+              <tr id="no-recipes-row">
+                <td colspan="7" style="text-align:center;">
+                  🍽️ You haven't added any recipes yet. Start by adding one!
+                </td>
+              </tr>`;
+          }
+        } else {
+          alert("Delete failed. Server response: " + xhr.responseText);
+        }
+      } else {
+        alert("Server error: " + xhr.status);
+      }
+    }
+  };
+
+  xhr.send("recipeID=" + recipeID);
+}
+</script>
 </body>
 </html>
