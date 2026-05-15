@@ -40,49 +40,16 @@ $totalLikes = $likesCountResult->fetch_assoc()['totalLikes'];
 
 $categoriesResult = $conn->query("SELECT * FROM recipecategory");
 
-$selectedCategory = "All";
-
-if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    $recipesStmt = $conn->prepare("
-        SELECT r.id, r.name, r.photoFileName, u.firstName, u.lastName, c.categoryName,
-        (SELECT COUNT(*) FROM likes WHERE recipeID = r.id) AS likesCount
-        FROM recipe r
-        JOIN user u ON r.userID = u.id
-        JOIN recipecategory c ON r.categoryID = c.id
-        ORDER BY r.id DESC
-    ");
-    $recipesStmt->execute();
-    $recipesResult = $recipesStmt->get_result();
-
-} elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['category'])) {
-    $selectedCategory = $_POST['category'];
-
-    if ($selectedCategory == "All") {
-        $recipesStmt = $conn->prepare("
-            SELECT r.id, r.name, r.photoFileName, u.firstName, u.lastName, c.categoryName,
-            (SELECT COUNT(*) FROM likes WHERE recipeID = r.id) AS likesCount
-            FROM recipe r
-            JOIN user u ON r.userID = u.id
-            JOIN recipecategory c ON r.categoryID = c.id
-            ORDER BY r.id DESC
-        ");
-        $recipesStmt->execute();
-        $recipesResult = $recipesStmt->get_result();
-    } else {
-        $recipesStmt = $conn->prepare("
-            SELECT r.id, r.name, r.photoFileName, u.firstName, u.lastName, c.categoryName,
-            (SELECT COUNT(*) FROM likes WHERE recipeID = r.id) AS likesCount
-            FROM recipe r
-            JOIN user u ON r.userID = u.id
-            JOIN recipecategory c ON r.categoryID = c.id
-            WHERE r.categoryID = ?
-            ORDER BY r.id DESC
-        ");
-        $recipesStmt->bind_param("i", $selectedCategory);
-        $recipesStmt->execute();
-        $recipesResult = $recipesStmt->get_result();
-    }
-}
+$recipesStmt = $conn->prepare("
+    SELECT r.id, r.name, r.photoFileName, u.firstName, u.lastName, c.categoryName,
+    (SELECT COUNT(*) FROM likes WHERE recipeID = r.id) AS likesCount
+    FROM recipe r
+    JOIN user u ON r.userID = u.id
+    JOIN recipecategory c ON r.categoryID = c.id
+    ORDER BY r.id DESC
+");
+$recipesStmt->execute();
+$recipesResult = $recipesStmt->get_result();
 
 $favouritesStmt = $conn->prepare("
     SELECT r.id, r.name, r.photoFileName
@@ -161,21 +128,20 @@ $favouritesResult = $favouritesStmt->get_result();
         <p class="section-sub">Simple healthy meals in minutes with minimal ingredients.</p>
       </div>
 
-      <form class="filter" method="POST" action="user.php">
+      <div class="filter">
         <label class="filter-label" for="category">Category</label>
         <select id="category" name="category">
-          <option value="All" <?php if ($selectedCategory == "All") echo "selected"; ?>>All</option>
+          <option value="All">All</option>
           <?php while ($cat = $categoriesResult->fetch_assoc()) { ?>
-            <option value="<?php echo $cat['id']; ?>" <?php if ($selectedCategory == $cat['id']) echo "selected"; ?>>
+            <option value="<?php echo $cat['id']; ?>">
               <?php echo htmlspecialchars($cat['categoryName']); ?>
             </option>
           <?php } ?>
         </select>
-        <button class="filter-btn" type="submit">Filter</button>
-      </form>
+      </div>
     </div>
 
-    <div class="table-wrap">
+    <div class="table-wrap" id="recipes-table-wrap">
       <?php if ($recipesResult->num_rows > 0) { ?>
       <table class="table">
         <thead>
@@ -186,7 +152,7 @@ $favouritesResult = $favouritesStmt->get_result();
             <th>Category</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="recipes-tbody">
           <?php while ($recipe = $recipesResult->fetch_assoc()) { ?>
           <tr>
             <td>
@@ -213,7 +179,7 @@ $favouritesResult = $favouritesStmt->get_result();
         </tbody>
       </table>
       <?php } else { ?>
-        <p>No recipes found.</p>
+        <p id="no-recipes-msg">No recipes found.</p>
       <?php } ?>
     </div>
   </section>
@@ -272,6 +238,47 @@ $favouritesResult = $favouritesStmt->get_result();
     </div>
   </div>
 </footer>
+
+<script>
+document.getElementById('category').addEventListener('change', function () {
+  var category = this.value;
+  var wrap = document.getElementById('recipes-table-wrap');
+
+  fetch('filter-recipes.php?category=' + encodeURIComponent(category))
+    .then(function (res) { return res.json(); })
+    .then(function (recipes) {
+      if (recipes.length === 0) {
+        wrap.innerHTML = '<p id="no-recipes-msg">No recipes found.</p>';
+        return;
+      }
+
+      var rows = recipes.map(function (r) {
+        var name = r.name.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        var photo = r.photoFileName.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        var creator = (r.firstName + ' ' + r.lastName).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        var cat = r.categoryName.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        return '<tr>' +
+          '<td><div class="recipe-cell">' +
+            '<img class="thumb-img" src="images/' + photo + '" alt="Recipe image">' +
+            '<a class="recipe-link" href="viewRecipe.php?id=' + r.id + '">' + name + '</a>' +
+          '</div></td>' +
+          '<td><div class="creator-cell">' + creator + '</div></td>' +
+          '<td><span class="likepill"><span class="heart">&#9829;</span>' + r.likesCount + '</span></td>' +
+          '<td><span class="cat">' + cat + '</span></td>' +
+        '</tr>';
+      }).join('');
+
+      wrap.innerHTML =
+        '<table class="table">' +
+          '<thead><tr><th>Recipe</th><th>Creator</th><th>Likes</th><th>Category</th></tr></thead>' +
+          '<tbody id="recipes-tbody">' + rows + '</tbody>' +
+        '</table>';
+    })
+    .catch(function () {
+      wrap.innerHTML = '<p>Failed to load recipes. Please try again.</p>';
+    });
+});
+</script>
 
 </body>
 </html>
