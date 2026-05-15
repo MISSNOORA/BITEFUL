@@ -54,7 +54,7 @@ $insert = $conn->prepare("
 $insert->bind_param("ssssss", $userType, $firstName, $lastName, $email, $hashedPassword, $photoFileName);
 
 if ($insert->execute()) {
-    $_SESSION['userID']   = $conn->insert_id; // gets the new user's auto-generated id
+    $_SESSION['userID']   = $conn->insert_id; 
     $_SESSION['userType'] = $userType;
 
     header("Location: user.php");
