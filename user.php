@@ -201,9 +201,9 @@ $favouritesResult = $favouritesStmt->get_result();
             <th class="actions">Actions</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="favourites-tbody">
           <?php while ($fav = $favouritesResult->fetch_assoc()) { ?>
-          <tr>
+          <tr data-recipe-id="<?php echo $fav['id']; ?>">
             <td>
               <div class="recipe-cell">
                 <img class="thumb-img" src="images/<?php echo htmlspecialchars($fav['photoFileName']); ?>" alt="Recipe image">
@@ -213,7 +213,7 @@ $favouritesResult = $favouritesStmt->get_result();
               </div>
             </td>
             <td class="actions">
-              <a class="remove-btn" href="removeFavourite.php?recipeID=<?php echo $fav['id']; ?>">Remove</a>
+              <button class="remove-btn remove-fav-btn" data-recipe-id="<?php echo $fav['id']; ?>">Remove</button>
             </td>
           </tr>
           <?php } ?>
@@ -240,6 +240,27 @@ $favouritesResult = $favouritesStmt->get_result();
 </footer>
 
 <script>
+document.addEventListener('click', function (e) {
+  if (!e.target.classList.contains('remove-fav-btn')) return;
+
+  var btn = e.target;
+  var recipeID = btn.dataset.recipeId;
+  var row = btn.closest('tr');
+
+  fetch('removeFavourite.php?recipeID=' + encodeURIComponent(recipeID))
+    .then(function (res) { return res.json(); })
+    .then(function (success) {
+      if (success) {
+        row.remove();
+
+        var tbody = document.querySelector('#favourites-tbody');
+        if (tbody && tbody.querySelectorAll('tr').length === 0) {
+          tbody.closest('.table-wrap').innerHTML = '<p>You do not have any favourite recipes.</p>';
+        }
+      }
+    });
+});
+
 document.getElementById('category').addEventListener('change', function () {
   var category = this.value;
   var wrap = document.getElementById('recipes-table-wrap');
