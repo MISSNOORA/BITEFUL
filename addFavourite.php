@@ -3,12 +3,12 @@ session_start();
 require_once "db.php";
 
 if (!isset($_SESSION['userID']) || $_SESSION['userType'] != "user") {
-    header("Location: signin.php");
+    echo "false";
     exit();
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['recipeID'])) {
-    $userID = $_SESSION['userID'];
+    $userID   = $_SESSION['userID'];
     $recipeID = (int) $_POST['recipeID'];
 
     /* do not allow creator to favourite own recipe */
@@ -28,15 +28,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['recipeID'])) {
             if ($checkStmt->get_result()->num_rows == 0) {
                 $insertStmt = $conn->prepare("INSERT INTO favourites (userID, recipeID) VALUES (?, ?)");
                 $insertStmt->bind_param("ii", $userID, $recipeID);
-                $insertStmt->execute();
+                if ($insertStmt->execute()) {
+                    echo "true";
+                    exit();
+                }
             }
         }
     }
-
-    header("Location: viewRecipe.php?id=" . $recipeID);
-    exit();
 }
 
-header("Location: user.php");
+echo "false";
 exit();
 ?>

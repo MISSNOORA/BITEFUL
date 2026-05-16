@@ -12,7 +12,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     exit();
 }
 
-$userID = $_SESSION['userID'];
+$userID   = $_SESSION['userID'];
 $userType = $_SESSION['userType'];
 $recipeID = (int) $_GET['id'];
 
@@ -76,16 +76,16 @@ $commentsResult = $commentsStmt->get_result();
 $likesStmt = $conn->prepare("SELECT COUNT(*) AS totalLikes FROM likes WHERE recipeID = ?");
 $likesStmt->bind_param("i", $recipeID);
 $likesStmt->execute();
-$likesResult = $likesStmt->get_result();
-$totalLikes = $likesResult->fetch_assoc()['totalLikes'];
+$likesResult     = $likesStmt->get_result();
+$totalLikes      = $likesResult->fetch_assoc()['totalLikes'];
 
 /* button rules */
 $isCreator = ($recipe['creatorID'] == $userID);
-$isAdmin = ($userType === 'admin');
+$isAdmin   = ($userType === 'admin');
 
-$alreadyLiked = false;
-$alreadyFavourited = false;
-$alreadyReported = false;
+$alreadyLiked       = false;
+$alreadyFavourited  = false;
+$alreadyReported    = false;
 
 if (!$isCreator && !$isAdmin) {
     $checkLike = $conn->prepare("SELECT * FROM likes WHERE userID = ? AND recipeID = ?");
@@ -110,12 +110,16 @@ if (!$isCreator && !$isAdmin) {
   <meta charset="UTF-8">
   <title>Biteful | <?php echo htmlspecialchars($recipe['name']); ?></title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* Visually grey out disabled action buttons */
+    .recipe-actions button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+  </style>
 </head>
 <body>
-
-<?php
-session_start();
-?>
 
 <header class="site-header">
   <div class="container header-inner">
@@ -130,22 +134,13 @@ session_start();
     </a>
 
     <nav class="nav">
-
       <?php if (isset($_SESSION['userType']) && $_SESSION['userType'] === 'admin'): ?>
-
-        <!-- ADMIN NAV -->
         <a href="admin.php" class="nav-link">Dashboard</a>
-
       <?php else: ?>
-
-        <!-- NORMAL USER NAV -->
         <a href="user.php" class="nav-link">Dashboard</a>
         <a href="my-recipes.php" class="nav-link">My Recipes</a>
-
       <?php endif; ?>
-
       <a href="logout.php" class="btn btn-ghost">Sign Out</a>
-
     </nav>
   </div>
 </header>
@@ -168,31 +163,37 @@ session_start();
           <?php echo htmlspecialchars($recipe['description']); ?>
         </p>
 
-        <p class="section-sub">Total Likes: <?php echo $totalLikes; ?></p>
+        <p class="section-sub" id="likes-count">Total Likes: <?php echo $totalLikes; ?></p>
 
         <?php if (!$isCreator && !$isAdmin): ?>
           <div class="recipe-actions">
 
-            <form action="addLike.php" method="post">
-              <input type="hidden" name="recipeID" value="<?php echo $recipeID; ?>">
-              <button type="submit" class="btn btn-ghost" <?php if ($alreadyLiked) echo "disabled"; ?>>
-                <?php echo $alreadyLiked ? "❤️ Liked" : "❤️ Like"; ?>
-              </button>
-            </form>
+            <!-- LIKE BUTTON -->
+            <button
+              id="btn-like"
+              class="btn btn-ghost"
+              <?php if ($alreadyLiked) echo 'disabled'; ?>
+              onclick="handleAction('addLike.php', 'btn-like', '❤️ Liked', 'likes-count')">
+              <?php echo $alreadyLiked ? "❤️ Liked" : "❤️ Like"; ?>
+            </button>
 
-            <form action="addFavourite.php" method="post">
-              <input type="hidden" name="recipeID" value="<?php echo $recipeID; ?>">
-              <button type="submit" class="btn btn-ghost" <?php if ($alreadyFavourited) echo "disabled"; ?>>
-                <?php echo $alreadyFavourited ? "⭐ Added" : "⭐ Add to Favourites"; ?>
-              </button>
-            </form>
+            <!-- FAVOURITE BUTTON -->
+            <button
+              id="btn-favourite"
+              class="btn btn-ghost"
+              <?php if ($alreadyFavourited) echo 'disabled'; ?>
+              onclick="handleAction('addFavourite.php', 'btn-favourite', '⭐ Added', null)">
+              <?php echo $alreadyFavourited ? "⭐ Added" : "⭐ Add to Favourites"; ?>
+            </button>
 
-            <form action="addReport.php" method="post">
-              <input type="hidden" name="recipeID" value="<?php echo $recipeID; ?>">
-              <button type="submit" class="btn btn-ghost" <?php if ($alreadyReported) echo "disabled"; ?>>
-                <?php echo $alreadyReported ? "🚩 Reported" : "🚩 Report"; ?>
-              </button>
-            </form>
+            <!-- REPORT BUTTON -->
+            <button
+              id="btn-report"
+              class="btn btn-ghost"
+              <?php if ($alreadyReported) echo 'disabled'; ?>
+              onclick="handleAction('addReport.php', 'btn-report', '🚩 Reported', null)">
+              <?php echo $alreadyReported ? "🚩 Reported" : "🚩 Report"; ?>
+            </button>
 
           </div>
         <?php endif; ?>
@@ -266,9 +267,7 @@ session_start();
     <form action="addComment.php" method="post" class="comment-form">
       <input type="hidden" name="recipeID" value="<?php echo $recipeID; ?>">
       <input type="text" name="comment" placeholder="Write a comment..." class="comment-input" required>
-      <button type="submit" class="btn btn-primary comment-btn">
-        Add Comment
-      </button>
+      <button type="submit" class="btn btn-primary comment-btn">Add Comment</button>
     </form>
   </div>
 
@@ -285,6 +284,58 @@ session_start();
     </div>
   </div>
 </footer>
+
+<script>
+  // recipeID available from PHP for use in AJAX
+  const recipeID = <?php echo $recipeID; ?>;
+
+  /**
+   * Sends an AJAX POST request to the given PHP file.
+   * If the response is "true", disables the button and updates its label.
+   *
+   * @param {string}      phpFile    - The PHP endpoint (e.g. 'addLike.php')
+   * @param {string}      btnID      - The ID of the button to disable
+   * @param {string}      newLabel   - The label to show after success
+   * @param {string|null} counterID  - Optional ID of a counter element to increment
+   */
+  function handleAction(phpFile, btnID, newLabel, counterID) {
+    const btn = document.getElementById(btnID);
+
+    // Prevent double-clicks while request is in flight
+    btn.disabled = true;
+
+    const formData = new FormData();
+    formData.append("recipeID", recipeID);
+
+    fetch(phpFile, {
+      method: "POST",
+      body: formData
+    })
+    .then(response => response.text())
+    .then(result => {
+      if (result.trim() === "true") {
+        // Success: keep button disabled and update its label
+        btn.textContent = newLabel;
+
+        // If a counter element is provided, increment it (used for likes)
+        if (counterID) {
+          const counter = document.getElementById(counterID);
+          if (counter) {
+            const current = parseInt(counter.textContent.replace(/\D/g, ""), 10);
+            counter.textContent = "Total Likes: " + (current + 1);
+          }
+        }
+      } else {
+        // Failed (already done or error): re-enable the button
+        btn.disabled = false;
+      }
+    })
+    .catch(() => {
+      // Network error: re-enable the button
+      btn.disabled = false;
+    });
+  }
+</script>
 
 </body>
 </html>
