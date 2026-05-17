@@ -16,6 +16,7 @@ $userID   = $_SESSION['userID'];
 $userType = $_SESSION['userType'];
 $recipeID = (int) $_GET['id'];
 
+/* recipe + creator + category */
 $sql = "
     SELECT r.*, 
            u.firstName, u.lastName, u.photoFileName AS creatorPhoto, u.id AS creatorID,
@@ -283,42 +284,37 @@ if (!$isCreator && !$isAdmin) {
   </div>
 </footer>
 
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
   const recipeID = <?php echo $recipeID; ?>;
 
-  
-   //Sends an AJAX POST request to the given PHP file.
+   //Sends a jQuery AJAX POST request to the given PHP file.
   
   function handleAction(phpFile, btnID, newLabel, counterID) {
-    const btn = document.getElementById(btnID);
+    var $btn = $("#" + btnID);
 
-    btn.disabled = true;
+    $btn.prop("disabled", true);
 
-    const formData = new FormData();
-    formData.append("recipeID", recipeID);
+    $.ajax({
+      url: phpFile,
+      type: "POST",
+      data: { recipeID: recipeID },
+      success: function(result) {
+        if (result.trim() === "true") {
+          $btn.text(newLabel);
 
-    fetch(phpFile, {
-      method: "POST",
-      body: formData
-    })
-    .then(response => response.text())
-    .then(result => {
-      if (result.trim() === "true") {
-        btn.textContent = newLabel;
-
-        if (counterID) {
-          const counter = document.getElementById(counterID);
-          if (counter) {
-            const current = parseInt(counter.textContent.replace(/\D/g, ""), 10);
-            counter.textContent = "Total Likes: " + (current + 1);
+          if (counterID) {
+            var $counter = $("#" + counterID);
+            var current = parseInt($counter.text().replace(/\D/g, ""), 10);
+            $counter.text("Total Likes: " + (current + 1));
           }
+        } else {
+          $btn.prop("disabled", false);
         }
-      } else {
-        btn.disabled = false;
+      },
+      error: function() {
+        $btn.prop("disabled", false);
       }
-    })
-    .catch(() => {
-      btn.disabled = false;
     });
   }
 </script>
