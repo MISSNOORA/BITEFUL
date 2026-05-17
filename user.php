@@ -239,65 +239,60 @@ $favouritesResult = $favouritesStmt->get_result();
   </div>
 </footer>
 
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
-document.addEventListener('click', function (e) {
-  if (!e.target.classList.contains('remove-fav-btn')) return;
-
-  var btn = e.target;
-  var recipeID = btn.dataset.recipeId;
+$(document).on('click', '.remove-fav-btn', function () {
+  var btn = $(this);
+  var recipeID = btn.data('recipe-id');
   var row = btn.closest('tr');
 
-  fetch('removeFavourite.php?recipeID=' + encodeURIComponent(recipeID))
-    .then(function (res) { return res.json(); })
-    .then(function (success) {
-      if (success) {
-        row.remove();
+  $.get('removeFavourite.php', { recipeID: recipeID }, function (success) {
+    if (success) {
+      row.remove();
 
-        var tbody = document.querySelector('#favourites-tbody');
-        if (tbody && tbody.querySelectorAll('tr').length === 0) {
-          tbody.closest('.table-wrap').innerHTML = '<p>You do not have any favourite recipes.</p>';
-        }
+      var tbody = $('#favourites-tbody');
+      if (tbody.find('tr').length === 0) {
+        tbody.closest('.table-wrap').html('<p>You do not have any favourite recipes.</p>');
       }
-    });
+    }
+  }, 'json');
 });
 
-document.getElementById('category').addEventListener('change', function () {
-  var category = this.value;
-  var wrap = document.getElementById('recipes-table-wrap');
+$('#category').on('change', function () {
+  var category = $(this).val();
+  var wrap = $('#recipes-table-wrap');
 
-  fetch('filter-recipes.php?category=' + encodeURIComponent(category))
-    .then(function (res) { return res.json(); })
-    .then(function (recipes) {
-      if (recipes.length === 0) {
-        wrap.innerHTML = '<p id="no-recipes-msg">No recipes found.</p>';
-        return;
-      }
+  $.get('filter-recipes.php', { category: category }, function (recipes) {
+    if (recipes.length === 0) {
+      wrap.html('<p id="no-recipes-msg">No recipes found.</p>');
+      return;
+    }
 
-      var rows = recipes.map(function (r) {
-        var name = r.name.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-        var photo = r.photoFileName.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-        var creator = (r.firstName + ' ' + r.lastName).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-        var cat = r.categoryName.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-        return '<tr>' +
-          '<td><div class="recipe-cell">' +
-            '<img class="thumb-img" src="images/' + photo + '" alt="Recipe image">' +
-            '<a class="recipe-link" href="viewRecipe.php?id=' + r.id + '">' + name + '</a>' +
-          '</div></td>' +
-          '<td><div class="creator-cell">' + creator + '</div></td>' +
-          '<td><span class="likepill"><span class="heart">&#9829;</span>' + r.likesCount + '</span></td>' +
-          '<td><span class="cat">' + cat + '</span></td>' +
-        '</tr>';
-      }).join('');
-
-      wrap.innerHTML =
-        '<table class="table">' +
-          '<thead><tr><th>Recipe</th><th>Creator</th><th>Likes</th><th>Category</th></tr></thead>' +
-          '<tbody id="recipes-tbody">' + rows + '</tbody>' +
-        '</table>';
-    })
-    .catch(function () {
-      wrap.innerHTML = '<p>Failed to load recipes. Please try again.</p>';
+    var rows = $.map(recipes, function (r) {
+      var name = $('<span>').text(r.name).html();
+      var photo = $('<span>').text(r.photoFileName).html();
+      var creator = $('<span>').text(r.firstName + ' ' + r.lastName).html();
+      var cat = $('<span>').text(r.categoryName).html();
+      return '<tr>' +
+        '<td><div class="recipe-cell">' +
+          '<img class="thumb-img" src="images/' + photo + '" alt="Recipe image">' +
+          '<a class="recipe-link" href="viewRecipe.php?id=' + r.id + '">' + name + '</a>' +
+        '</div></td>' +
+        '<td><div class="creator-cell">' + creator + '</div></td>' +
+        '<td><span class="likepill"><span class="heart">&#9829;</span>' + r.likesCount + '</span></td>' +
+        '<td><span class="cat">' + cat + '</span></td>' +
+      '</tr>';
     });
+
+    wrap.html(
+      '<table class="table">' +
+        '<thead><tr><th>Recipe</th><th>Creator</th><th>Likes</th><th>Category</th></tr></thead>' +
+        '<tbody id="recipes-tbody">' + rows.join('') + '</tbody>' +
+      '</table>'
+    );
+  }, 'json').fail(function () {
+    wrap.html('<p>Failed to load recipes. Please try again.</p>');
+  });
 });
 </script>
 

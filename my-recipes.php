@@ -201,47 +201,29 @@ if (!empty($row['videoFilePath'])) {
   </div>
 </footer>
 
-<<script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
 function deleteRecipe(recipeID) {
   if (!confirm('Are you sure you want to delete this recipe?')) return;
 
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", "ajax-delete-recipe.php", true);
-  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  $.post('ajax-delete-recipe.php', { recipeID: recipeID }, function (response) {
+    if (response.trim() === 'true') {
+      $('#recipe-row-' + recipeID).remove();
 
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4) {
-      if (xhr.status === 200) {
-        const response = xhr.responseText.trim();
-        console.log("Response: [" + response + "]"); // Debug log
-
-        if (response === "true") {
-          const row = document.getElementById("recipe-row-" + recipeID);
-          if (row) {
-            row.remove();
-          }
-
-          // If no rows left, show empty message
-          const tbody = document.querySelector(".recipes-table tbody");
-          const remainingRows = tbody.querySelectorAll("tr[id^='recipe-row-']");
-          if (remainingRows.length === 0) {
-            tbody.innerHTML = `
-              <tr id="no-recipes-row">
-                <td colspan="7" style="text-align:center;">
-                  🍽️ You haven't added any recipes yet. Start by adding one!
-                </td>
-              </tr>`;
-          }
-        } else {
-          alert("Delete failed. Server response: " + xhr.responseText);
-        }
-      } else {
-        alert("Server error: " + xhr.status);
+      var remaining = $('.recipes-table tbody tr[id^="recipe-row-"]');
+      if (remaining.length === 0) {
+        $('.recipes-table tbody').html(
+          '<tr id="no-recipes-row">' +
+            '<td colspan="7" style="text-align:center;">' +
+              '🍽️ You haven\'t added any recipes yet. Start by adding one!' +
+            '</td>' +
+          '</tr>'
+        );
       }
+    } else {
+      alert('Delete failed. Please try again.');
     }
-  };
-
-  xhr.send("recipeID=" + recipeID);
+  });
 }
 </script>
 </body>
