@@ -26,15 +26,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // ===== IMAGE — now we have recipeID to use in file name =====
     $photoName = "";
     if (isset($_FILES['photo']) && $_FILES['photo']['error'] === 0) {
-        // FIX: include recipeID in the file name
-        $photoName = "recipe_" . $recipeID . "_" . uniqid() . "_" . basename($_FILES['photo']['name']);
+        // FIX: include recipeID in the file name + lowercase
+        $photoName = "recipe_" . $recipeID . "_" . uniqid() . "_" . strtolower(basename($_FILES['photo']['name']));
         move_uploaded_file($_FILES['photo']['tmp_name'], "images/" . $photoName);
     }
 
     // ===== VIDEO =====
     $videoPath = "";
     if (!empty($_FILES['video']['name'])) {
-        $videoPath = "recipe_" . $recipeID . "_" . uniqid() . "_" . basename($_FILES['video']['name']);
+        $videoPath = "recipe_" . $recipeID . "_" . uniqid() . "_" . strtolower(basename($_FILES['video']['name']));
         move_uploaded_file($_FILES['video']['tmp_name'], "videos/" . $videoPath);
     } elseif (!empty($_POST['videoURL'])) {
         $videoPath = trim($_POST['videoURL']);

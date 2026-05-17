@@ -45,8 +45,8 @@ if ($insert->execute()) {
     $photoFileName = "default.jpg";
     if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
         $uploadsDir   = "images/";
-        $originalName = basename($_FILES['photo']['name']);
-        // FIX: include userID in the file name
+        $originalName = strtolower(basename($_FILES['photo']['name']));
+        // FIX: include userID in the file name + lowercase
         $uniqueName   = "user_" . $newUserID . "_" . uniqid() . "_" . $originalName;
         if (move_uploaded_file($_FILES['photo']['tmp_name'], $uploadsDir . $uniqueName)) {
             $photoFileName = $uniqueName;

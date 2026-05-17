@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             unlink("images/" . $oldPhoto);
         }
         // Save new photo with recipeID in the file name
-        $photoName = "recipe_" . $recipe_id . "_" . uniqid() . "_" . $_FILES['photo']['name'];
+        $photoName = "recipe_" . $recipe_id . "_" . uniqid() . "_" . strtolower($_FILES['photo']['name']);
         move_uploaded_file($_FILES['photo']['tmp_name'], "images/" . $photoName);
     } else {
         $photoName = $recipe['photoFileName'];
@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             unlink("videos/" . $oldVideo);
         }
         // Save new video with recipeID in the file name
-        $videoName = "recipe_" . $recipe_id . "_" . uniqid() . "_" . $_FILES['video']['name'];
+        $videoName = "recipe_" . $recipe_id . "_" . uniqid() . "_" . strtolower($_FILES['video']['name']);
         move_uploaded_file($_FILES['video']['tmp_name'], "videos/" . $videoName);
         $videoPath = $videoName;
     } else {
