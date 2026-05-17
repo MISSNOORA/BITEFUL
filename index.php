@@ -1,8 +1,3 @@
-<!--test-->
-<!--Noora Netbeans test-->
-<!--testyara-->
-<!--test farah-->
-<!--shahaaaaaaad-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -123,14 +118,14 @@
               </span>
             </div>
             <div class="card-body">
-              <h3 class="card-title"><a href="signin.html">Creamy Chicken Pasta</a></h3>
+              <h3 class="card-title"><a href="signin.php">Creamy Chicken Pasta</a></h3>
               <p class="card-meta">
                 <span class="meta-ico" aria-hidden="true">👤</span> <em>Nora Sami:</em> LOVED IT.
               </p>
             </div>
           </article>
 
-       
+
           <article class="card float-down" style="--delay: 120ms;">
             <div class="card-media">
               <div class="card-image"
@@ -146,14 +141,14 @@
               </span>
             </div>
             <div class="card-body">
-              <h3 class="card-title"><a href="signin.html">Tuna Corn Salad</a></h3>
+              <h3 class="card-title"><a href="signin.php">Tuna Corn Salad</a></h3>
               <p class="card-meta">
                 <span class="meta-ico" aria-hidden="true">👤</span> <em>Lina Omar:</em> So easy to prepare.
               </p>
             </div>
           </article>
 
- 
+
           <article class="card float-up" style="--delay: 240ms;">
             <div class="card-media">
               <div class="card-image"
@@ -169,7 +164,7 @@
               </span>
             </div>
             <div class="card-body">
-              <h3 class="card-title"><a href="signin.html">Banana Cookie Dough Balls</a></h3>
+              <h3 class="card-title"><a href="signin.php">Banana Cookie Dough Balls</a></h3>
               <p class="card-meta">
                 <span class="meta-ico" aria-hidden="true">👤</span> <em>Reem Hassan:</em> Easy and fun to make.
               </p>
@@ -178,7 +173,7 @@
         </div>
 
         <div class="section-cta">
-          <a class="link" href="signin.html">
+          <a class="link" href="signin.php">
             View All Recipes <span class="arrow">→</span>
           </a>
         </div>
