@@ -32,42 +32,43 @@ $steps = $conn->query("SELECT * FROM instructions WHERE recipeID=$recipe_id ORDE
 /* ===== UPDATE ===== */
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    $recipe_id = $_POST['recipe_id']; 
-    $name = $_POST['name'];
-    $categoryID = $_POST['category'];
+    $recipe_id   = $_POST['recipe_id'];
+    $name        = $_POST['name'];
+    $categoryID  = $_POST['category'];
     $description = $_POST['description'];
 
-    /* IMAGE */
+    /* IMAGE — FIX: delete old file if a new one is uploaded */
     if (!empty($_FILES['photo']['name'])) {
-        $photoName = uniqid() . "_" . $_FILES['photo']['name'];
+        // Delete the old photo file from disk
+        $oldPhoto = $recipe['photoFileName'];
+        if ($oldPhoto && $oldPhoto !== "default.jpg" && file_exists("images/" . $oldPhoto)) {
+            unlink("images/" . $oldPhoto);
+        }
+        // Save new photo with recipeID in the file name
+        $photoName = "recipe_" . $recipe_id . "_" . uniqid() . "_" . $_FILES['photo']['name'];
         move_uploaded_file($_FILES['photo']['tmp_name'], "images/" . $photoName);
     } else {
         $photoName = $recipe['photoFileName'];
     }
 
-    /* VIDEO */
-    
-if (!empty($_FILES['video']['name'])) {
-
-    
-    $videoName = uniqid() . "_" . $_FILES['video']['name'];
-
-    move_uploaded_file($_FILES['video']['tmp_name'], "videos/" . $videoName);
-
-    
-    $videoPath = $videoName;
-
-} else {
-
-   
-    if (!empty($_POST['videoURL'])) {
-        $videoPath = $_POST['videoURL'];
-    } 
-    
-    else {
-        $videoPath = $recipe['videoFilePath'];
+    /* VIDEO — FIX: delete old file if a new one is uploaded */
+    if (!empty($_FILES['video']['name'])) {
+        // Delete old video file from disk (only if it's a local file, not a URL)
+        $oldVideo = $recipe['videoFilePath'];
+        if ($oldVideo && !filter_var($oldVideo, FILTER_VALIDATE_URL) && file_exists("videos/" . $oldVideo)) {
+            unlink("videos/" . $oldVideo);
+        }
+        // Save new video with recipeID in the file name
+        $videoName = "recipe_" . $recipe_id . "_" . uniqid() . "_" . $_FILES['video']['name'];
+        move_uploaded_file($_FILES['video']['tmp_name'], "videos/" . $videoName);
+        $videoPath = $videoName;
+    } else {
+        if (!empty($_POST['videoURL'])) {
+            $videoPath = $_POST['videoURL'];
+        } else {
+            $videoPath = $recipe['videoFilePath'];
+        }
     }
-}
 
     /* UPDATE RECIPE */
     $stmt = $conn->prepare("UPDATE recipe SET name=?, categoryID=?, description=?, photoFileName=?, videoFilePath=? WHERE id=?");
@@ -76,7 +77,6 @@ if (!empty($_FILES['video']['name'])) {
 
     /* INGREDIENTS */
     $conn->query("DELETE FROM ingredients WHERE recipeID=$recipe_id");
-
     foreach ($_POST['ingredientName'] as $i => $ingName) {
         $qty = $_POST['ingredientQuantity'][$i];
         if ($ingName && $qty) {
@@ -88,11 +88,10 @@ if (!empty($_FILES['video']['name'])) {
 
     /* STEPS */
     $conn->query("DELETE FROM instructions WHERE recipeID=$recipe_id");
-
     foreach ($_POST['steps'] as $i => $step) {
         if ($step) {
             $order = $i + 1;
-            $stmt = $conn->prepare("INSERT INTO instructions (recipeID, step, stepOrder) VALUES (?, ?, ?)");
+            $stmt  = $conn->prepare("INSERT INTO instructions (recipeID, step, stepOrder) VALUES (?, ?, ?)");
             $stmt->bind_param("isi", $recipe_id, $step, $order);
             $stmt->execute();
         }
@@ -124,7 +123,6 @@ if (!empty($_FILES['video']['name'])) {
         <span class="brand-tag">Fast & Easy Meals</span>
       </div>
     </a>
-
     <nav class="nav">
       <a href="user.php" class="nav-link">Dashboard</a>
       <a href="my-recipes.php" class="nav-link">My Recipes</a>
@@ -142,7 +140,6 @@ if (!empty($_FILES['video']['name'])) {
 
       <form class="form" method="POST" enctype="multipart/form-data">
 
-        <!-- ✅ REQUIRED -->
         <input type="hidden" name="recipe_id" value="<?= $recipe_id ?>">
 
         <div class="group">
@@ -176,7 +173,6 @@ if (!empty($_FILES['video']['name'])) {
 
         <div class="group">
           <label>Ingredients</label>
-
           <div id="ingredients">
             <?php while($ing = $ingredients->fetch_assoc()) { ?>
               <div class="two">
@@ -185,43 +181,26 @@ if (!empty($_FILES['video']['name'])) {
               </div>
             <?php } ?>
           </div>
-
-          <button type="button" class="btn btn-ghost" onclick="addIngredient()">
-            + Add another ingredient
-          </button>
+          <button type="button" class="btn btn-ghost" onclick="addIngredient()">+ Add another ingredient</button>
         </div>
 
         <div class="group">
           <label>Instructions</label>
-
           <div id="steps">
             <?php while($s = $steps->fetch_assoc()) { ?>
               <input type="text" name="steps[]" value="<?= $s['step'] ?>" required>
             <?php } ?>
           </div>
-
-          <button type="button" class="btn btn-ghost" onclick="addStep()">
-            + Add another step
-          </button>
+          <button type="button" class="btn btn-ghost" onclick="addStep()">+ Add another step</button>
         </div>
 
-        <?php if (!empty($recipe['videoFilePath'])) { 
+        <?php if (!empty($recipe['videoFilePath'])) {
+            $video = $recipe['videoFilePath'];
+            $link  = filter_var($video, FILTER_VALIDATE_URL) ? $video : "videos/" . $video;
+        ?>
+          <p>Current video: <a href="<?= htmlspecialchars($link) ?>" target="_blank">Watch video</a></p>
+        <?php } ?>
 
-    $video = $recipe['videoFilePath'];
-
-    if (filter_var($video, FILTER_VALIDATE_URL)) {
-        $link = $video;
-    } else {
-        $link = "videos/" . $video;
-    }
-?>
-    <p>
-        Current video:
-        <a href="<?php echo htmlspecialchars($link); ?>" target="_blank">
-            Watch video
-        </a>
-    </p>
-<?php } ?>
         <div class="group">
           <label>Upload Video (Optional)</label>
           <input type="file" name="video" accept="video/*">
@@ -229,13 +208,12 @@ if (!empty($_FILES['video']['name'])) {
 
         <div class="group">
           <label>Video URL (Optional)</label>
-         <input type="url" name="videoURL" value="<?= filter_var($recipe['videoFilePath'], FILTER_VALIDATE_URL) ? $recipe['videoFilePath'] : '' ?>">
+          <input type="url" name="videoURL" value="<?= filter_var($recipe['videoFilePath'], FILTER_VALIDATE_URL) ? $recipe['videoFilePath'] : '' ?>">
         </div>
 
         <button type="submit" class="btn green">Update Recipe</button>
 
       </form>
-
     </div>
   </div>
 </main>
@@ -245,9 +223,7 @@ if (!empty($_FILES['video']['name'])) {
     <div class="footer-brand">
       <span class="footer-name">BiteFul</span>
     </div>
-    <div class="footer-copy">
-      © 2026 BiteFul. All rights reserved.
-    </div>
+    <div class="footer-copy">© 2026 BiteFul. All rights reserved.</div>
   </div>
 </footer>
 
@@ -264,13 +240,13 @@ function addIngredient() {
 }
 
 function addStep() {
-  const steps = document.getElementById("steps");
+  const steps   = document.getElementById("steps");
   const stepNum = steps.children.length + 1;
-  const input = document.createElement("input");
-  input.type = "text";
-  input.name = "steps[]";
+  const input   = document.createElement("input");
+  input.type        = "text";
+  input.name        = "steps[]";
   input.placeholder = "Step " + stepNum;
-  input.required = true;
+  input.required    = true;
   steps.appendChild(input);
 }
 </script>

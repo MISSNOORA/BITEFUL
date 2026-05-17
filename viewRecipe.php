@@ -16,7 +16,6 @@ $userID   = $_SESSION['userID'];
 $userType = $_SESSION['userType'];
 $recipeID = (int) $_GET['id'];
 
-/* recipe + creator + category */
 $sql = "
     SELECT r.*, 
            u.firstName, u.lastName, u.photoFileName AS creatorPhoto, u.id AS creatorID,
@@ -111,7 +110,6 @@ if (!$isCreator && !$isAdmin) {
   <title>Biteful | <?php echo htmlspecialchars($recipe['name']); ?></title>
   <link rel="stylesheet" href="style.css">
   <style>
-    /* Visually grey out disabled action buttons */
     .recipe-actions button:disabled {
       opacity: 0.5;
       cursor: not-allowed;
@@ -286,22 +284,14 @@ if (!$isCreator && !$isAdmin) {
 </footer>
 
 <script>
-  // recipeID available from PHP for use in AJAX
   const recipeID = <?php echo $recipeID; ?>;
 
-  /**
-   * Sends an AJAX POST request to the given PHP file.
-   * If the response is "true", disables the button and updates its label.
-   *
-   * @param {string}      phpFile    - The PHP endpoint (e.g. 'addLike.php')
-   * @param {string}      btnID      - The ID of the button to disable
-   * @param {string}      newLabel   - The label to show after success
-   * @param {string|null} counterID  - Optional ID of a counter element to increment
-   */
+  
+   //Sends an AJAX POST request to the given PHP file.
+  
   function handleAction(phpFile, btnID, newLabel, counterID) {
     const btn = document.getElementById(btnID);
 
-    // Prevent double-clicks while request is in flight
     btn.disabled = true;
 
     const formData = new FormData();
@@ -314,10 +304,8 @@ if (!$isCreator && !$isAdmin) {
     .then(response => response.text())
     .then(result => {
       if (result.trim() === "true") {
-        // Success: keep button disabled and update its label
         btn.textContent = newLabel;
 
-        // If a counter element is provided, increment it (used for likes)
         if (counterID) {
           const counter = document.getElementById(counterID);
           if (counter) {
@@ -326,12 +314,10 @@ if (!$isCreator && !$isAdmin) {
           }
         }
       } else {
-        // Failed (already done or error): re-enable the button
         btn.disabled = false;
       }
     })
     .catch(() => {
-      // Network error: re-enable the button
       btn.disabled = false;
     });
   }

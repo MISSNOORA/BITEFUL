@@ -9,43 +9,47 @@ if (!isset($_SESSION['userID'])) {
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    $userID = $_SESSION['userID'];
-
-    $name = trim($_POST['name'] ?? '');
-    $categoryID = intval($_POST['category'] ?? 0);
+    $userID      = $_SESSION['userID'];
+    $name        = trim($_POST['name'] ?? '');
+    $categoryID  = intval($_POST['category'] ?? 0);
     $description = trim($_POST['description'] ?? '');
 
-    // ===== IMAGE =====
+    // ===== INSERT RECIPE FIRST (without photo) to get recipeID =====
+    $stmt = $conn->prepare("INSERT INTO recipe (userID, name, categoryID, description, photoFileName, videoFilePath)
+                           VALUES (?, ?, ?, ?, ?, ?)");
+    $tempPhoto = "";
+    $tempVideo = "";
+    $stmt->bind_param("isisss", $userID, $name, $categoryID, $description, $tempPhoto, $tempVideo);
+    $stmt->execute();
+    $recipeID = $conn->insert_id;
+
+    // ===== IMAGE — now we have recipeID to use in file name =====
     $photoName = "";
     if (isset($_FILES['photo']) && $_FILES['photo']['error'] === 0) {
-        $photoName = uniqid() . "_" . basename($_FILES['photo']['name']);
+        // FIX: include recipeID in the file name
+        $photoName = "recipe_" . $recipeID . "_" . uniqid() . "_" . basename($_FILES['photo']['name']);
         move_uploaded_file($_FILES['photo']['tmp_name'], "images/" . $photoName);
     }
 
     // ===== VIDEO =====
     $videoPath = "";
     if (!empty($_FILES['video']['name'])) {
-        $videoPath = uniqid() . "_" . basename($_FILES['video']['name']);
+        $videoPath = "recipe_" . $recipeID . "_" . uniqid() . "_" . basename($_FILES['video']['name']);
         move_uploaded_file($_FILES['video']['tmp_name'], "videos/" . $videoPath);
     } elseif (!empty($_POST['videoURL'])) {
         $videoPath = trim($_POST['videoURL']);
     }
 
-    // ===== INSERT RECIPE =====
-    $stmt = $conn->prepare("INSERT INTO recipe (userID, name, categoryID, description, photoFileName, videoFilePath)
-                           VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("isisss", $userID, $name, $categoryID, $description, $photoName, $videoPath);
-    $stmt->execute();
-
-    $recipeID = $conn->insert_id;
+    // ===== UPDATE RECIPE with correct file names =====
+    $update = $conn->prepare("UPDATE recipe SET photoFileName = ?, videoFilePath = ? WHERE id = ?");
+    $update->bind_param("ssi", $photoName, $videoPath, $recipeID);
+    $update->execute();
 
     // ===== INGREDIENTS =====
     if (!empty($_POST['ingredientName'])) {
         foreach ($_POST['ingredientName'] as $i => $ingName) {
-
             $ingName = trim($ingName);
-            $qty = trim($_POST['ingredientQuantity'][$i]);
-
+            $qty     = trim($_POST['ingredientQuantity'][$i]);
             if ($ingName !== "" && $qty !== "") {
                 $stmt = $conn->prepare("INSERT INTO ingredients (recipeID, ingredientName, ingredientQuantity)
                                        VALUES (?, ?, ?)");
@@ -58,12 +62,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // ===== STEPS =====
     if (!empty($_POST['steps'])) {
         foreach ($_POST['steps'] as $index => $step) {
-
             $step = trim($step);
             if ($step !== "") {
                 $order = $index + 1;
-
-                $stmt = $conn->prepare("INSERT INTO instructions (recipeID, step, stepOrder)
+                $stmt  = $conn->prepare("INSERT INTO instructions (recipeID, step, stepOrder)
                                        VALUES (?, ?, ?)");
                 $stmt->bind_param("isi", $recipeID, $step, $order);
                 $stmt->execute();
@@ -97,7 +99,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <span class="brand-tag">Fast & Easy Meals</span>
       </div>
     </a>
-
     <nav class="nav">
       <a href="user.php" class="nav-link">Dashboard</a>
       <a href="my-recipes.php" class="nav-link">My Recipes</a>
@@ -120,17 +121,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
           <input type="text" name="name" required>
         </div>
 
-        <!-- ✅ CATEGORY FROM DB -->
         <div class="group">
           <label>Category</label>
           <select name="category" required>
             <option value="">Select</option>
             <?php
-         
             $result = $conn->query("SELECT * FROM recipecategory");
-while ($row = $result->fetch_assoc()) {
-    echo "<option value='{$row['id']}'>{$row['categoryName']}</option>";
-}
+            while ($row = $result->fetch_assoc()) {
+                echo "<option value='{$row['id']}'>{$row['categoryName']}</option>";
+            }
             ?>
           </select>
         </div>
@@ -145,7 +144,6 @@ while ($row = $result->fetch_assoc()) {
           <input type="file" name="photo" accept="image/*" required>
         </div>
 
-        <!-- INGREDIENTS -->
         <div class="group">
           <label>Ingredients</label>
           <div id="ingredients">
@@ -159,7 +157,6 @@ while ($row = $result->fetch_assoc()) {
           </button>
         </div>
 
-        <!-- STEPS -->
         <div class="group">
           <label>Instructions</label>
           <div id="steps">
@@ -193,9 +190,7 @@ while ($row = $result->fetch_assoc()) {
       <span class="logo logo-footer"></span>
       <span class="footer-name">BiteFul</span>
     </div>
-    <div class="footer-copy">
-      © 2026 BiteFul. All rights reserved.
-    </div>
+    <div class="footer-copy">© 2026 BiteFul. All rights reserved.</div>
   </div>
 </footer>
 
@@ -212,13 +207,13 @@ function addIngredient() {
 }
 
 function addStep() {
-  const steps = document.getElementById("steps");
+  const steps   = document.getElementById("steps");
   const stepNum = steps.children.length + 1;
-  const input = document.createElement("input");
-  input.type = "text";
-  input.name = "steps[]";
+  const input   = document.createElement("input");
+  input.type        = "text";
+  input.name        = "steps[]";
   input.placeholder = "Step " + stepNum;
-  input.required = true;
+  input.required    = true;
   steps.appendChild(input);
 }
 </script>

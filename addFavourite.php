@@ -11,7 +11,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['recipeID'])) {
     $userID   = $_SESSION['userID'];
     $recipeID = (int) $_POST['recipeID'];
 
-    /* do not allow creator to favourite own recipe */
     $creatorStmt = $conn->prepare("SELECT userID FROM recipe WHERE id = ?");
     $creatorStmt->bind_param("i", $recipeID);
     $creatorStmt->execute();
